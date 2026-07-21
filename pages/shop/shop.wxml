@@ -1,0 +1,99 @@
+<!-- 学术 Roguelike —— 商店页面 -->
+<view class="shop-page">
+
+  <!-- 顶部信息 -->
+  <view class="shop-header">
+    <view class="shop-title">
+      <text class="title-icon">🏪</text>
+      <text class="title-text">学术资源中心</text>
+    </view>
+    <view class="shop-funding">
+      <text class="funding-icon">💰</text>
+      <text class="funding-amount">经费: ¥{{funding}}</text>
+    </view>
+  </view>
+
+  <scroll-view class="shop-content" scroll-y>
+
+    <!-- ===== 技能卡区 ===== -->
+    <view class="shop-section" wx:if="{{skills.length > 0}}">
+      <view class="section-header">
+        <text class="section-title">🧠 学术技能卡</text>
+        <text class="section-hint">被动效果 · 永久生效</text>
+      </view>
+      <view class="section-grid">
+        <view
+          class="shop-item"
+          wx:for="{{skills}}"
+          wx:key="id"
+          data-index="{{index}}"
+          bindtap="onBuySkill"
+        >
+          <game-card card="{{item}}" cardType="skill" />
+          <view class="item-price">
+            <text class="price-text">¥{{item.price}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- ===== 机遇卡区 ===== -->
+    <view class="shop-section" wx:if="{{consumables.length > 0}}">
+      <view class="section-header">
+        <text class="section-title">🎲 机遇卡</text>
+        <text class="section-hint">一次性效果 · 即时生效</text>
+      </view>
+      <view class="section-grid">
+        <view
+          class="shop-item"
+          wx:for="{{consumables}}"
+          wx:key="id"
+          data-index="{{index}}"
+          bindtap="onBuyConsumable"
+        >
+          <game-card card="{{item}}" cardType="consumable" />
+          <view class="item-price">
+            <text class="price-text">¥{{item.price}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- ===== 服务区 ===== -->
+    <view class="shop-section">
+      <view class="section-header">
+        <text class="section-title">🛠️ 服务</text>
+        <text class="section-hint">牌组编辑</text>
+      </view>
+      <view class="services-list">
+        <view
+          class="service-item"
+          wx:for="{{services}}"
+          wx:key="id"
+          data-index="{{index}}"
+          bindtap="onUseService"
+        >
+          <view class="service-info">
+            <text class="service-icon">{{item.icon}}</text>
+            <view class="service-detail">
+              <text class="service-name">{{item.name}}</text>
+              <text class="service-desc">{{item.description}}</text>
+            </view>
+          </view>
+          <view class="service-price">
+            <text class="price-text">¥{{item.price}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+  </scroll-view>
+
+  <!-- 底部操作 -->
+  <view class="shop-footer">
+    <pixel-button theme="primary" size="medium" bindtap="onLeaveShop">
+      离开商店，继续攻关 ▶
+    </pixel-button>
+  </view>
+
+</view>

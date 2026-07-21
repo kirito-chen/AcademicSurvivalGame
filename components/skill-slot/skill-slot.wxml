@@ -1,0 +1,15 @@
+<!-- 学术 Roguelike —— 技能槽位 -->
+<view
+  class="skill-slot {{skill ? 'filled' : 'empty'}}"
+  style="{{skill ? '--slot-color: ' + (rarityColors[skill.rarity] || '#aaa') : ''}}"
+  bindtap="onTap"
+>
+  <block wx:if="{{skill}}">
+    <text class="slot-icon">{{skill.icon || '🧠'}}</text>
+    <text class="slot-name">{{skill.name}}</text>
+  </block>
+  <block wx:else>
+    <text class="slot-empty-icon">+</text>
+    <text class="slot-empty-text">空槽位</text>
+  </block>
+</view>

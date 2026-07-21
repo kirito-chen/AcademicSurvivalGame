@@ -1,25 +1,17 @@
 /**
  * 学术生存指南 —— 决策解析器
- * 接收玩家选择的决策，计算实际效果（含随机修正）
+ * 接收玩家选择的决策，计算实际效果（含随机修正 + 特长修正）
  */
 
-const { resolveRange, randomFloat } = require('../utils/random')
+const { resolveRange } = require('../utils/random')
+const { RESOURCE_LIMITS } = require('../config/constants')
 
 class DecisionResolver {
 
-  /**
-   * @param {ResourceManager} resourceManager - 资源管理器实例
-   */
   constructor(resourceManager) {
     this.resourceManager = resourceManager
   }
 
-  /**
-   * 检查决策是否可用
-   * @param {object} decision - 决策定义
-   * @param {object} state - 当前游戏状态
-   * @returns {{available: boolean, reason?: string}}
-   */
   checkAvailability(decision, state) {
     const reqs = decision.requirements || {}
     const res = state.resources
@@ -32,7 +24,6 @@ class DecisionResolver {
       return { available: false, reason: `存款不足（需要≥${reqs.minMoney}）` }
     }
 
-    // 检查每月限次
     const monthCount = state.completedDecisions.filter(d => d === decision.id).length
     if (decision.dailyLimit && monthCount >= decision.dailyLimit) {
       return { available: false, reason: `本月已执行${monthCount}次（每月上限${decision.dailyLimit}次）` }
@@ -42,24 +33,23 @@ class DecisionResolver {
   }
 
   /**
-   * 执行一个决策，返回结果
+   * 执行决策，返回结果
    * @param {object} decision - 决策定义
    * @param {object} state - 当前游戏状态
-   * @returns {object} 决策结果 { success, effects, message, changes }
+   * @param {object} talentConfig - 特长配置（可选）
    */
-  execute(decision, state) {
-    // 1. 检查前置条件
+  execute(decision, state, talentConfig) {
     const availability = this.checkAvailability(decision, state)
     if (!availability.available) {
       return { success: false, message: availability.reason, changes: [] }
     }
 
-    // 2. 应用基础效果
+    // 1. 应用基础效果
     const allChanges = []
     const baseChanges = this.resourceManager.applyEffects(state.resources, decision.baseEffects)
     allChanges.push(...baseChanges)
 
-    // 3. 计算随机修正
+    // 2. 计算随机修正
     let bonusMessage = ''
     if (decision.randomModifier) {
       const roll = Math.random()
@@ -74,6 +64,11 @@ class DecisionResolver {
         allChanges.push(...failChanges)
         bonusMessage = decision.randomModifier.onFailure.message
       }
+    }
+
+    // 3. 应用特长修正
+    if (talentConfig && talentConfig.modifiers) {
+      this._applyTalentModifiers(decision, state, allChanges, talentConfig.modifiers)
     }
 
     // 4. 记录已完成决策
@@ -98,10 +93,56 @@ class DecisionResolver {
   }
 
   /**
-   * 获取决策的预估效果（用于 UI 预览）
-   * @param {object} decision - 决策定义
-   * @returns {object} 预估效果
+   * 应用特长修正到效果变化量
+   * 在效果已应用到资源后，按比例回溯调整
    */
+  _applyTalentModifiers(decision, state, changes, mods) {
+    for (const change of changes) {
+      let multiplier = 1.0
+
+      // 精力消耗修正（仅负值）
+      if (mods.energyCost && change.key === 'energy' && change.delta < 0) {
+        multiplier = mods.energyCost
+      }
+
+      // 论文进度修正：实验有独立系数，否则用通用系数
+      if (change.key === 'paperProgress' && change.delta > 0) {
+        if (mods.experimentEffect && decision.id === 'run_experiment') {
+          multiplier = mods.experimentEffect
+        } else if (mods.paperGain) {
+          multiplier = mods.paperGain
+        }
+      }
+
+      // 社交资本修正（仅正值）
+      if (mods.socialGain && change.key === 'socialCapital' && change.delta > 0) {
+        multiplier = mods.socialGain
+      }
+
+      // 导师满意度修正（仅正值）
+      if (mods.advisorGain && change.key === 'advisorSatisfaction' && change.delta > 0) {
+        multiplier = mods.advisorGain
+      }
+
+      // 金钱修正（仅正值）
+      if (mods.moneyGain && change.key === 'money' && change.delta > 0) {
+        multiplier = mods.moneyGain
+      }
+
+      // 应用修正
+      if (multiplier !== 1.0) {
+        const adjustment = Math.round(change.delta * (multiplier - 1))
+        const limits = RESOURCE_LIMITS[change.key]
+        if (limits) {
+          const newVal = Math.max(limits.min, Math.min(limits.max, (state.resources[change.key] || 0) + adjustment))
+          state.resources[change.key] = newVal
+          change.delta += adjustment
+          change.newValue = newVal
+        }
+      }
+    }
+  }
+
   getPreview(decision) {
     const preview = {}
     for (const [key, value] of Object.entries(decision.baseEffects)) {

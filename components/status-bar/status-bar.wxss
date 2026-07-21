@@ -25,6 +25,16 @@
   margin-left: 8rpx;
 }
 
+.talent-badge {
+  font-family: monospace;
+  font-size: 20rpx;
+  color: var(--color-success);
+  -webkit-font-smoothing: none;
+  margin-left: 8rpx;
+  padding: 1rpx 8rpx;
+  border: 1rpx solid var(--color-success);
+}
+
 .year-text {
   font-family: monospace;
   font-size: 20rpx;
@@ -45,4 +55,20 @@
 .resources-grid > resource-bar {
   flex: 0 0 calc(50% - 6rpx);
   max-width: calc(50% - 6rpx);
+}
+
+/* 次要资源单行 */
+.secondary-row {
+  margin-top: 6rpx;
+  padding-top: 4rpx;
+  border-top: 1rpx dashed var(--color-border-dim);
+  gap: 24rpx;
+  justify-content: center;
+}
+
+.sec-item {
+  font-family: monospace;
+  font-size: 20rpx;
+  color: var(--color-text-dim);
+  -webkit-font-smoothing: none;
 }

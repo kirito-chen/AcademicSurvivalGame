@@ -15,7 +15,14 @@ Component({
   observers: {
     'event, resources'(newEvent, resources) {
       if (newEvent && newEvent.options) {
-        // 预计算每个选项的可用状态（WXML 不支持直接调用方法）
+        // 中文标签映射
+        const labelMap = {
+          energy: '精力', paperProgress: '论文进度',
+          advisorSatisfaction: '导师满意度', money: '存款',
+          mentalHealth: '心理健康', socialCapital: '社交资本',
+          luck: '运气'
+        }
+        // 预计算每个选项的可用状态和中文效果标签
         const optionsWithState = newEvent.options.map(opt => {
           let available = true
           let requirementHint = ''
@@ -23,19 +30,23 @@ Component({
             for (const [key, minValue] of Object.entries(opt.requirements)) {
               if ((resources[key] || 0) < minValue) {
                 available = false
-                const labelMap = {
-                  energy: '精力', paperProgress: '论文进度',
-                  advisorSatisfaction: '导师满意度', money: '存款',
-                  mentalHealth: '心理健康', socialCapital: '社交资本'
-                }
                 requirementHint = `需要${labelMap[key] || key}≥${minValue}`
                 break
               }
             }
           }
-          return { ...opt, _available: available, _requirementHint: requirementHint }
+          // 将效果对象转为中文标签数组 [{label:'精力', value:-30}, ...]
+          const effectLabels = []
+          if (opt.effects) {
+            for (const [key, val] of Object.entries(opt.effects)) {
+              if (val !== 0) {
+                effectLabels.push({ label: labelMap[key] || key, value: val })
+              }
+            }
+          }
+          return { ...opt, _available: available, _requirementHint: requirementHint, _effectLabels: effectLabels }
         })
-        this.setData({ optionsWithState, visible: true })
+        this.setData({ optionsWithState, visible: true, eventTypeLabel: this._getTypeLabel(newEvent.type) })
       } else {
         this.setData({ optionsWithState: [], selectedOption: null })
       }
@@ -53,6 +64,10 @@ Component({
   },
 
   methods: {
+    _getTypeLabel(type) {
+      const map = { positive: '🎉 好事', negative: '⚠️ 坏事', neutral: '📋 中性', milestone: '📍 里程碑' }
+      return map[type] || '事件'
+    },
     /**
      * 选择一个选项
      */

@@ -1,6 +1,12 @@
 /**
- * 学术生存指南 —— 资源管理器
- * 负责所有资源（精力、论文进度、导师满意度、存款等）的增减与边界保护
+ * 学术 Roguelike —— 资源管理器
+ * 负责所有资源的增减与边界保护
+ *
+ * 简化后的资源系统(4项):
+ *   energy            - 精力 (0-100)
+ *   funding           - 经费 (0-99999)
+ *   paperProgress     - 论文进度 (0-100)
+ *   advisorSatisfaction - 导师满意度 (0-100)
  */
 
 const { RESOURCE_LIMITS } = require('../config/constants')
@@ -15,13 +21,10 @@ class ResourceManager {
    */
   createInitialResources(initialState) {
     return {
-      energy: initialState.energy,
-      paperProgress: initialState.paperProgress,
-      advisorSatisfaction: initialState.advisorSatisfaction,
-      money: initialState.money,
-      mentalHealth: initialState.mentalHealth,
-      socialCapital: initialState.socialCapital,
-      luck: initialState.luck
+      energy: initialState.energy || 80,
+      funding: initialState.funding || 200,
+      paperProgress: initialState.paperProgress || 0,
+      advisorSatisfaction: initialState.advisorSatisfaction || 60
     }
   }
 
@@ -35,8 +38,8 @@ class ResourceManager {
     const changes = []
 
     for (const [key, rawValue] of Object.entries(effects)) {
-      // 跳过非资源字段
-      if (!RESOURCE_LIMITS[key] && key !== 'flags') continue
+      // 只处理资源字段
+      if (!RESOURCE_LIMITS[key]) continue
 
       const oldValue = resources[key] || 0
       const delta = resolveRange(rawValue)
@@ -56,45 +59,12 @@ class ResourceManager {
   }
 
   /**
-   * 应用每月自然衰减
-   * @param {object} resources - 当前资源对象
-   * @param {object} monthlyDecay - 每月衰减配置
-   * @returns {Array} 变化列表
-   */
-  applyMonthlyDecay(resources, monthlyDecay) {
-    const changes = []
-
-    // 基础每月消耗
-    for (const [key, value] of Object.entries(monthlyDecay)) {
-      const oldValue = resources[key] || 0
-      let newValue = oldValue + value
-      const limits = RESOURCE_LIMITS[key]
-      if (limits) {
-        newValue = Math.max(limits.min, Math.min(limits.max, newValue))
-      }
-      resources[key] = newValue
-      if (newValue !== oldValue) {
-        changes.push({ key, delta: newValue - oldValue, newValue })
-      }
-    }
-
-    // 焦虑高于70时，额外精力消耗
-    if (resources.anxiety > 70) {
-      const oldEnergy = resources.energy
-      resources.energy = Math.max(0, oldEnergy - 8)
-      changes.push({ key: 'energy', delta: resources.energy - oldEnergy, newValue: resources.energy })
-    }
-
-    return changes
-  }
-
-  /**
-   * 检查是否有资源归零（触发失败条件）
+   * 检查是否有关键资源归零
    * @param {object} resources - 当前资源对象
    * @returns {string|null} 归零的资源 key，若没有则返回 null
    */
   checkResourceZero(resources) {
-    const criticalResources = ['energy', 'money', 'advisorSatisfaction']
+    const criticalResources = ['energy', 'funding', 'advisorSatisfaction']
     for (const key of criticalResources) {
       if (resources[key] <= 0) {
         return key

@@ -1,63 +1,65 @@
-<view class="ending-page {{gradeClass}}">
+<!-- 学术 Roguelike —— 结局页 -->
+<view class="ending-page {{typeClass}}">
+
   <!-- 结局主视觉 -->
   <view class="ending-hero">
-    <text class="ending-emoji">{{gradeEmoji}}</text>
-    <text class="ending-title pixel-text-glow">{{ending.title}}</text>
-    <view class="ending-grade" wx:if="{{ending.grade}}">
-      <text class="grade-label">结局评级</text>
-      <text class="grade-value">{{ending.grade}}</text>
+    <text class="ending-emoji">{{typeIcon}}</text>
+    <text class="ending-title pixel-text-glow">
+      {{won ? '恭喜毕业！' : '科研之路中断'}}
+    </text>
+    <view class="ending-subtitle">
+      <text>{{won ? '你成功通过了最终答辩！' : '这次博士之旅结束了……'}}</text>
     </view>
   </view>
 
-  <!-- 结局描述 -->
-  <view class="ending-desc pixel-panel">
-    <text class="desc-text">{{ending.description}}</text>
-  </view>
-
-  <!-- 趣味点评 -->
-  <view class="ending-flavor pixel-panel" wx:if="{{ending.flavorText}}">
-    <text class="flavor-label">📝 编者按</text>
-    <text class="flavor-text">{{ending.flavorText}}</text>
-  </view>
-
-  <!-- 统计数据 -->
-  <view class="ending-stats pixel-panel" wx:if="{{ending.stats}}">
-    <text class="stats-title">📊 学术生涯统计</text>
+  <!-- Run 统计 -->
+  <view class="ending-stats pixel-panel">
+    <text class="stats-title">📊 本轮 Run 统计</text>
     <view class="stats-grid">
       <view class="stat-item">
-        <text class="stat-label">经过月份</text>
-        <text class="stat-value">{{ending.stats.month}}</text>
+        <text class="stat-label">总学术产出</text>
+        <text class="stat-value">{{totalScore}}</text>
       </view>
       <view class="stat-item">
-        <text class="stat-label">最终论文进度</text>
-        <text class="stat-value">{{ending.stats.paperProgress}}%</text>
+        <text class="stat-label">通过学期</text>
+        <text class="stat-value">{{anteReached}}/4</text>
       </view>
       <view class="stat-item">
-        <text class="stat-label">论文发表数</text>
-        <text class="stat-value">{{ending.stats.totalPapersPublished || 0}}</text>
+        <text class="stat-label">打出手牌</text>
+        <text class="stat-value">{{totalCardsPlayed}}</text>
       </view>
       <view class="stat-item">
-        <text class="stat-label">实验失败次数</text>
-        <text class="stat-value">{{ending.stats.totalExperimentsFailed || 0}}</text>
+        <text class="stat-label">通过关卡</text>
+        <text class="stat-value">{{totalRoundsCleared}}</text>
       </view>
       <view class="stat-item">
-        <text class="stat-label">开会次数</text>
-        <text class="stat-value">{{ending.stats.totalMeetingsAttended || 0}}</text>
+        <text class="stat-label">最高单次产出</text>
+        <text class="stat-value">{{highestSingleScore}}</text>
       </view>
       <view class="stat-item">
-        <text class="stat-label">经历事件数</text>
-        <text class="stat-value">{{ending.stats.eventHistory ? ending.stats.eventHistory.length : 0}}</text>
+        <text class="stat-label">学科</text>
+        <text class="stat-value">{{discipline}}</text>
       </view>
+    </view>
+  </view>
+
+  <!-- 学术声望结算 -->
+  <view class="ending-ap pixel-panel">
+    <text class="ap-title">⭐ 学术声望结算</text>
+    <view class="ap-row">
+      <text class="ap-label">本轮获得</text>
+      <text class="ap-value">+{{apGained}} AP</text>
     </view>
   </view>
 
   <!-- 操作按钮 -->
   <view class="ending-actions">
     <view class="pixel-btn pixel-btn-large" bindtap="onPlayAgain">
-      🔄 再来一局
+      🔄 再来一局 (相同配置)
     </view>
     <view class="pixel-btn pixel-btn-large mt-24" bindtap="onBackHome">
       🏠 返回首页
     </view>
   </view>
+
 </view>

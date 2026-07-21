@@ -16,9 +16,9 @@
       style="width: {{percent}}%; background-color: {{barColor}};"
     ></view>
   </view>
-  <view class="recent-delta" wx:if="{{recentDelta !== 0}}">
-    <text class="{{recentDelta > 0 ? 'text-success' : 'text-danger'}}">
-      {{recentDelta > 0 ? '+' : ''}}{{recentDelta}}
+  <view class="recent-delta">
+    <text class="{{recentDelta > 0 ? 'text-success' : recentDelta < 0 ? 'text-danger' : ''}}">
+      {{recentDelta > 0 ? '+' : ''}}{{recentDelta !== 0 ? recentDelta : ''}}
     </text>
   </view>
 </view>

@@ -2,11 +2,12 @@
   "pages": [
     "pages/index/index",
     "pages/game/game",
+    "pages/shop/shop",
     "pages/save/save",
     "pages/ending/ending"
   ],
   "window": {
-    "navigationBarTitleText": "学术生存指南",
+    "navigationBarTitleText": "学术 Roguelike",
     "navigationBarBackgroundColor": "#1a1a2e",
     "navigationBarTextStyle": "white",
     "backgroundColor": "#1a1a2e",

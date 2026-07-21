@@ -1,0 +1,56 @@
+/**
+ * 学术 Roguelike —— 技能槽位样式
+ */
+
+.skill-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 110rpx;
+  height: 110rpx;
+  border: 4rpx solid #333;
+  background: #1a1a2e;
+  box-shadow: 2rpx 2rpx 0 rgba(0, 0, 0, 0.5);
+  transition: all 0.15s ease;
+}
+
+.skill-slot.filled {
+  border-color: var(--slot-color, #aaa);
+  box-shadow: 4rpx 4rpx 0 var(--slot-color, #aaa);
+}
+
+.skill-slot.empty {
+  border-style: dashed;
+  border-color: #333;
+  opacity: 0.5;
+}
+
+.skill-slot:active {
+  transform: scale(0.95);
+}
+
+.slot-icon {
+  font-size: 36rpx;
+  margin-bottom: 2rpx;
+}
+
+.slot-name {
+  font-size: 18rpx;
+  color: #eeeeb8;
+  text-align: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.slot-empty-icon {
+  font-size: 36rpx;
+  color: #555;
+}
+
+.slot-empty-text {
+  font-size: 16rpx;
+  color: #444;
+}

@@ -1,0 +1,162 @@
+/**
+ * 学术 Roguelike —— 商店页面样式
+ */
+
+.shop-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #1a1a2e;
+  color: #eeeeb8;
+}
+
+/* 顶部 */
+.shop-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16rpx 24rpx;
+  background: #16213e;
+  border-bottom: 4rpx solid #f0a500;
+  flex-shrink: 0;
+}
+
+.shop-title { display: flex; align-items: center; gap: 10rpx; }
+.title-icon { font-size: 36rpx; }
+.title-text { font-size: 28rpx; font-weight: bold; }
+
+.shop-funding { display: flex; align-items: center; gap: 8rpx; }
+.funding-icon { font-size: 28rpx; }
+.funding-amount { font-size: 24rpx; font-weight: bold; color: #f0a500; }
+
+/* 内容区 */
+.shop-content {
+  flex: 1;
+  padding: 16rpx;
+  min-height: 0;
+}
+
+.shop-section {
+  margin-bottom: 24rpx;
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12rpx;
+  margin-bottom: 12rpx;
+  padding-bottom: 6rpx;
+  border-bottom: 2rpx solid #333;
+}
+
+.section-title {
+  font-size: 26rpx;
+  font-weight: bold;
+  color: #eeeeb8;
+}
+
+.section-hint {
+  font-size: 20rpx;
+  color: #666;
+}
+
+/* 卡牌网格 */
+.section-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.shop-item {
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.shop-item:active {
+  transform: scale(0.95);
+}
+
+.item-price {
+  position: absolute;
+  bottom: -4rpx;
+  right: -4rpx;
+  background: #f0a500;
+  padding: 2rpx 10rpx;
+  border: 2rpx solid #1a1a2e;
+}
+
+.price-text {
+  font-size: 20rpx;
+  font-weight: bold;
+  color: #1a1a2e;
+}
+
+/* 服务列表 */
+.services-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.service-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14rpx 18rpx;
+  background: #16213e;
+  border: 3rpx solid #333;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.service-item:active {
+  border-color: #f0a500;
+  background: rgba(240, 165, 0, 0.1);
+}
+
+.service-info {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  flex: 1;
+}
+
+.service-icon { font-size: 32rpx; flex-shrink: 0; }
+
+.service-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.service-name {
+  font-size: 22rpx;
+  font-weight: bold;
+  color: #eeeeb8;
+}
+
+.service-desc {
+  font-size: 18rpx;
+  color: #888;
+}
+
+.service-price {
+  flex-shrink: 0;
+  margin-left: 12rpx;
+}
+
+.service-price .price-text {
+  font-size: 22rpx;
+  color: #f0a500;
+}
+
+/* 底部 */
+.shop-footer {
+  display: flex;
+  justify-content: center;
+  padding: 16rpx;
+  background: #16213e;
+  border-top: 4rpx solid #333;
+  flex-shrink: 0;
+}

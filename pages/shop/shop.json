@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "game-card": "/components/game-card/game-card",
+    "pixel-button": "/components/pixel-button/pixel-button"
+  },
+  "navigationBarTitleText": "学术资源中心",
+  "disableScroll": true
+}

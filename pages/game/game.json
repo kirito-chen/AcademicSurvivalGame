@@ -1,8 +1,11 @@
 {
   "usingComponents": {
-    "status-bar": "../../components/status-bar/status-bar",
-    "decision-card": "../../components/decision-card/decision-card",
-    "event-modal": "../../components/event-modal/event-modal",
-    "game-log": "../../components/game-log/game-log"
-  }
+    "game-card": "/components/game-card/game-card",
+    "skill-slot": "/components/skill-slot/skill-slot",
+    "pixel-button": "/components/pixel-button/pixel-button",
+    "game-log": "/components/game-log/game-log",
+    "status-bar": "/components/status-bar/status-bar"
+  },
+  "navigationBarTitleText": "学术 Roguelike",
+  "disableScroll": true
 }

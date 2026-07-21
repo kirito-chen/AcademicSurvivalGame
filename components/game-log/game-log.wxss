@@ -53,6 +53,11 @@
   font-weight: bold;
 }
 
+.log-achievement .log-text {
+  color: var(--color-success);
+  font-weight: bold;
+}
+
 .log-empty {
   text-align: center;
   padding: 32rpx;

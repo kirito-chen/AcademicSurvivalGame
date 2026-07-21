@@ -4,6 +4,7 @@
     <view class="day-info">
       <text class="day-number">📅 博{{yearNum}} · 第{{month}}月</text>
       <text class="day-phase">{{phaseName}}</text>
+      <text class="talent-badge" wx:if="{{talentName}}">{{talentName}}</text>
     </view>
     <view class="year-info">
       <text class="year-text">{{month}}/72</text>
@@ -24,5 +25,12 @@
       showPercent="{{item.key !== 'money'}}"
       recentDelta="{{deltas[item.key] || 0}}"
     />
+  </view>
+
+  <!-- 次要资源（单行紧凑） -->
+  <view class="secondary-row flex-row">
+    <text class="sec-item">😊 {{resources.mentalHealth || 0}}</text>
+    <text class="sec-item">🤝 {{resources.socialCapital || 0}}</text>
+    <text class="sec-item">🍀 {{resources.luck || 0}}</text>
   </view>
 </view>

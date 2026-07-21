@@ -98,4 +98,6 @@
   font-family: monospace;
   text-align: right;
   margin-top: 2rpx;
+  min-height: 28rpx;
+  line-height: 28rpx;
 }

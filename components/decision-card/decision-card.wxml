@@ -5,6 +5,7 @@
 >
   <text class="decision-icon">{{decision.icon}}</text>
   <text class="decision-name">{{decision.name}}</text>
+  <text class="decision-effects" wx:if="{{effectSummary}}">{{effectSummary}}</text>
   <view class="decision-badge badge-category" wx:if="{{available}}">
     <text class="badge-text">{{decision.category === 'academic' ? '学术' : decision.category === 'rest' ? '休息' : '副业'}}</text>
   </view>

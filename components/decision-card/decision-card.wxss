@@ -21,7 +21,7 @@
 }
 
 .decision-icon {
-  font-size: 40rpx;
+  font-size: 52rpx;
   display: block;
   margin-bottom: 4rpx;
 }
@@ -33,6 +33,16 @@
   color: var(--color-text);
   -webkit-font-smoothing: none;
   text-align: center;
+}
+
+.decision-effects {
+  font-family: monospace;
+  font-size: 18rpx;
+  color: var(--color-text-dim);
+  -webkit-font-smoothing: none;
+  text-align: center;
+  margin-top: 2rpx;
+  line-height: 1.3;
 }
 
 .decision-badge {

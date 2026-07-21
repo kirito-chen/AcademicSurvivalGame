@@ -8,6 +8,7 @@ Component({
     month: { type: Number, value: 1 },
     phase: { type: String, value: 'enrollment' },
     discipline: { type: String, value: '' },
+    talentName: { type: String, value: '' },
     deltas: { type: Object, value: {} }
   },
 
