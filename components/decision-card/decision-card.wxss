@@ -3,8 +3,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 16rpx 12rpx;
+  padding: 16rpx 8rpx;
   min-height: 120rpx;
+  width: 100%;
+  box-sizing: border-box;
   transition: all 0.1s;
 }
 

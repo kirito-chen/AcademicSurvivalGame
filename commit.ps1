@@ -1,49 +1,49 @@
-<#
-    一键提交脚本
-    用法：.\commit.ps1 "你的提交信息"
-    如果不传参数，使用默认提交信息
+﻿<#
+    One-Click Commit & Push Script
+    Usage: .\commit.ps1 "commit message"
+    Default message: "update code"
 #>
 
 param(
-    [string]$Message = "更新代码"
+    [string]$Message = "update code"
 )
 
-$env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
 
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "  一键提交 & 推送" -ForegroundColor Cyan
+Write-Host "  One-Click Commit + Push" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
-# 1. 查看状态
-Write-Host "[1/4] 检查文件变更..." -ForegroundColor Yellow
+# 1. Check status
+Write-Host "[1/4] Checking file changes..." -ForegroundColor Yellow
 git status --short
 Write-Host ""
 
-# 2. 添加到暂存区
-Write-Host "[2/4] 添加所有变更到暂存区..." -ForegroundColor Yellow
+# 2. Stage all changes
+Write-Host "[2/4] Staging all changes..." -ForegroundColor Yellow
 git add .
-Write-Host "已添加所有变更" -ForegroundColor Green
+Write-Host "All changes staged" -ForegroundColor Green
 Write-Host ""
 
-# 3. 提交
-Write-Host "[3/4] 提交: $Message" -ForegroundColor Yellow
+# 3. Commit
+Write-Host "[3/4] Commit: $Message" -ForegroundColor Yellow
 git commit -m $Message
 if (-not $?) {
-    Write-Host "提交失败或没有变更需要提交" -ForegroundColor Red
+    Write-Host "Commit failed or nothing to commit" -ForegroundColor Red
     exit 1
 }
 Write-Host ""
 
-# 4. 推送到远程
-Write-Host "[4/4] 推送到远程仓库..." -ForegroundColor Yellow
+# 4. Push to remote
+Write-Host "[4/4] Pushing to remote..." -ForegroundColor Yellow
 git push
 if ($?) {
     Write-Host ""
     Write-Host "========================================" -ForegroundColor Green
-    Write-Host "  提交 & 推送成功!" -ForegroundColor Green
+    Write-Host "  Commit + Push Success!" -ForegroundColor Green
     Write-Host "========================================" -ForegroundColor Green
 } else {
     Write-Host ""
-    Write-Host "推送失败，请检查远程仓库配置" -ForegroundColor Red
+    Write-Host "Push failed, please check remote config" -ForegroundColor Red
 }

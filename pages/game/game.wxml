@@ -19,13 +19,13 @@
   <view class="main-actions">
     <!-- 决策网格 -->
     <view class="decisions-grid">
-      <decision-card
-        wx:for="{{decisions}}"
-        wx:key="id"
-        decision="{{item}}"
-        available="{{item.available}}"
-        bind:select="onSelectDecision"
-      />
+      <view class="grid-cell" wx:for="{{decisions}}" wx:key="id">
+        <decision-card
+          decision="{{item}}"
+          available="{{item.available}}"
+          bind:select="onSelectDecision"
+        />
+      </view>
     </view>
 
     <!-- 底部按钮栏 -->

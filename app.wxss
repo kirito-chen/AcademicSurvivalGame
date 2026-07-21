@@ -60,6 +60,27 @@ page {
   pointer-events: none;
 }
 
+.pixel-btn-small {
+  padding: 10rpx 20rpx;
+  font-size: 24rpx;
+  border-width: 3rpx;
+}
+
+.pixel-btn-large {
+  padding: 24rpx 48rpx;
+  font-size: 36rpx;
+}
+
+.pixel-btn-danger {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+.pixel-btn-disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
 /* === 像素面板 === */
 .pixel-panel {
   background: var(--color-panel);

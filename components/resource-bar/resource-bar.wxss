@@ -1,35 +1,40 @@
 .resource-bar {
-  margin-bottom: 8rpx;
-}
-
-.resource-bar.small {
-  font-size: 22rpx;
-}
-
-.resource-bar.small .pixel-progress {
-  height: 12rpx;
-}
-
-.resource-header {
   margin-bottom: 4rpx;
 }
 
+.resource-bar.small {
+  font-size: 20rpx;
+}
+
+.resource-bar.small .pixel-progress {
+  height: 10rpx;
+}
+
+.resource-header {
+  margin-bottom: 2rpx;
+}
+
 .resource-label {
-  gap: 8rpx;
+  gap: 6rpx;
 }
 
 .resource-icon {
-  font-size: 28rpx;
+  font-size: 24rpx;
 }
 
 .small .resource-icon {
-  font-size: 20rpx;
+  font-size: 18rpx;
 }
 
 .resource-name {
   color: var(--color-text);
   font-family: monospace;
   -webkit-font-smoothing: none;
+  font-size: 24rpx;
+}
+
+.small .resource-name {
+  font-size: 20rpx;
 }
 
 .resource-info {
@@ -40,24 +45,36 @@
 .resource-value {
   color: var(--color-text);
   font-weight: bold;
-  font-size: 28rpx;
+  font-size: 24rpx;
+}
+
+.small .resource-value {
+  font-size: 20rpx;
 }
 
 .resource-max {
   color: var(--color-text-dim);
-  font-size: 22rpx;
+  font-size: 20rpx;
+}
+
+.small .resource-max {
+  font-size: 18rpx;
 }
 
 .resource-percent {
   color: var(--color-text-dim);
-  font-size: 20rpx;
+  font-size: 18rpx;
   margin-left: 4rpx;
 }
 
+.small .resource-percent {
+  font-size: 16rpx;
+}
+
 .pixel-progress {
-  height: 20rpx;
+  height: 14rpx;
   background: #0a0a14;
-  border: 2rpx solid #333;
+  border: 1rpx solid #333;
   position: relative;
   overflow: hidden;
 }

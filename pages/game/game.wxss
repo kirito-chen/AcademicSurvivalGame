@@ -49,23 +49,17 @@
   min-height: 0;
 }
 
-/* 决策网格：3列 + 2列 */
+/* 决策网格：前3个一行，后2个一行 */
 .decisions-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 12rpx;
+  gap: 10rpx;
   justify-content: center;
 }
 
-.decisions-grid > decision-card {
-  flex: 0 0 calc(33.33% - 8rpx);
-  max-width: calc(33.33% - 8rpx);
-}
-
-/* 后2个居中 */
-.decisions-grid > decision-card:nth-child(4),
-.decisions-grid > decision-card:nth-child(5) {
-  flex: 0 0 calc(33.33% - 8rpx);
+.grid-cell {
+  width: calc(33.33% - 7rpx);
+  max-width: calc(33.33% - 7rpx);
 }
 
 /* 按钮栏 */
