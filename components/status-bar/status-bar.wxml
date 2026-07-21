@@ -1,0 +1,28 @@
+<view class="status-bar pixel-panel">
+  <!-- 日期与阶段（单行） -->
+  <view class="status-header flex-between">
+    <view class="day-info">
+      <text class="day-number">📅 博{{yearNum}} · 第{{month}}月</text>
+      <text class="day-phase">{{phaseName}}</text>
+    </view>
+    <view class="year-info">
+      <text class="year-text">{{month}}/72</text>
+    </view>
+  </view>
+
+  <!-- 资源条：2x2 网格 -->
+  <view class="resources-grid">
+    <resource-bar
+      wx:for="{{resourceConfigs}}"
+      wx:key="key"
+      size="small"
+      label="{{item.label}}"
+      icon="{{item.icon}}"
+      value="{{resources[item.key] || 0}}"
+      max="{{item.key === 'money' ? '' : 100}}"
+      barColor="{{item.color}}"
+      showPercent="{{item.key !== 'money'}}"
+      recentDelta="{{deltas[item.key] || 0}}"
+    />
+  </view>
+</view>

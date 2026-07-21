@@ -1,0 +1,66 @@
+<view class="game-page">
+  <!-- 顶部状态栏 -->
+  <status-bar
+    resources="{{resources}}"
+    month="{{month}}"
+    phase="{{phase}}"
+    discipline="{{discipline}}"
+    deltas="{{resourceDeltas}}"
+  />
+
+  <!-- 操作反馈弹窗 -->
+  <view class="action-toast {{showActionToast ? 'toast-visible' : ''}}" wx:if="{{showActionToast}}">
+    <view class="toast-content pixel-panel">
+      <text class="toast-text">{{actionToast}}</text>
+    </view>
+  </view>
+
+  <!-- 操作按钮 + 决策区合并 -->
+  <view class="main-actions">
+    <!-- 决策网格 -->
+    <view class="decisions-grid">
+      <decision-card
+        wx:for="{{decisions}}"
+        wx:key="id"
+        decision="{{item}}"
+        available="{{item.available}}"
+        bind:select="onSelectDecision"
+      />
+    </view>
+
+    <!-- 底部按钮栏 -->
+    <view class="bottom-bar flex-between">
+      <view class="pixel-btn pixel-btn-small" bindtap="onNextMonth">
+        🌅 下个月
+      </view>
+      <view class="pixel-btn pixel-btn-small" bindtap="onSave">
+        💾 存档
+      </view>
+      <view class="pixel-btn pixel-btn-small pixel-btn-danger" bindtap="onQuit">
+        🚪 退出
+      </view>
+    </view>
+  </view>
+
+  <!-- 紧凑日志 -->
+  <view class="compact-log">
+    <game-log logs="{{logs}}" maxHeight="120" />
+  </view>
+
+  <!-- 事件弹窗 -->
+  <event-modal
+    event="{{currentEvent}}"
+    resources="{{resources}}"
+    visible="{{showEventModal}}"
+    bind:resolve="onResolveEvent"
+  />
+
+  <!-- 游戏结束遮罩 -->
+  <view class="game-over-overlay" wx:if="{{gameOver}}">
+    <view class="game-over-content">
+      <text class="go-title">{{ending.title}}</text>
+      <text class="go-desc">{{ending.description}}</text>
+      <text class="pixel-blink go-hint">正在生成结局报告...</text>
+    </view>
+  </view>
+</view>

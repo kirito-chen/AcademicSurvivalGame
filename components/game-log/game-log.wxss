@@ -1,0 +1,66 @@
+.game-log-container {
+  background: rgba(0, 0, 0, 0.4);
+  border: 3rpx solid var(--color-border-dim);
+  padding: 12rpx;
+}
+
+.log-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.log-item {
+  font-family: monospace;
+  font-size: 24rpx;
+  line-height: 1.6;
+  -webkit-font-smoothing: none;
+  padding: 4rpx 0;
+  border-bottom: 1rpx solid rgba(255, 255, 255, 0.05);
+  animation: logSlideIn 0.2s;
+}
+
+@keyframes logSlideIn {
+  from { transform: translateX(-10rpx); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.log-day {
+  color: var(--color-text-dim);
+  font-size: 20rpx;
+  margin-right: 8rpx;
+}
+
+.log-text {
+  color: var(--color-text-dim);
+}
+
+/* 不同类型日志的颜色 */
+.log-system .log-text {
+  color: var(--color-warning);
+}
+
+.log-decision .log-text {
+  color: var(--color-text);
+}
+
+.log-event .log-text {
+  color: var(--color-energy);
+}
+
+.log-phase .log-text {
+  color: var(--color-success);
+  font-weight: bold;
+}
+
+.log-empty {
+  text-align: center;
+  padding: 32rpx;
+}
+
+.log-empty text {
+  font-family: monospace;
+  font-size: 24rpx;
+  color: var(--color-text-dim);
+  -webkit-font-smoothing: none;
+}

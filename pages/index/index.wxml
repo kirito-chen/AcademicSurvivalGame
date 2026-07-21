@@ -1,0 +1,98 @@
+<view class="index-page">
+  <!-- 主视觉区域 -->
+  <view class="hero-section">
+    <view class="logo-area">
+      <text class="logo-icon">🎓</text>
+      <text class="logo-title pixel-text-glow">学术生存指南</text>
+      <text class="logo-subtitle">Ph.D. Survival Simulator</text>
+    </view>
+
+    <view class="tagline pixel-panel">
+      <text class="tagline-text">"读完博士，活着就好。"</text>
+      <text class="tagline-author">—— 某不知名博五学长</text>
+    </view>
+  </view>
+
+  <!-- 菜单按钮 -->
+  <view class="menu-section">
+    <view class="menu-btn pixel-btn pixel-btn-large" bindtap="onNewGame">
+      <text class="menu-btn-icon">🆕</text>
+      <text class="menu-btn-text">新 游 戏</text>
+      <text class="menu-btn-hint">开始一段痛苦的旅程</text>
+    </view>
+
+    <view class="menu-btn pixel-btn pixel-btn-large {{hasSave ? '' : 'pixel-btn-disabled'}}" bindtap="onContinue">
+      <text class="menu-btn-icon">▶️</text>
+      <text class="menu-btn-text">继 续 游 戏</text>
+      <text class="menu-btn-hint" wx:if="{{hasSave}}">{{latestSaveLabel}}</text>
+      <text class="menu-btn-hint" wx:else>暂无存档</text>
+    </view>
+
+    <view class="menu-btn pixel-btn pixel-btn-large" bindtap="onSaveManager">
+      <text class="menu-btn-icon">💾</text>
+      <text class="menu-btn-text">存 档 管 理</text>
+      <text class="menu-btn-hint">管理你的存档文件</text>
+    </view>
+
+    <view class="menu-btn pixel-btn pixel-btn-large" bindtap="onToggleAbout">
+      <text class="menu-btn-icon">📖</text>
+      <text class="menu-btn-text">关 于 游 戏</text>
+    </view>
+  </view>
+
+  <!-- 学科选择面板 -->
+  <view class="discipline-overlay" wx:if="{{showDisciplineSelect}}" catchtouchmove="preventTouchMove">
+    <view class="discipline-panel pixel-panel">
+      <text class="disc-title">🔬 选择你的学科</text>
+      <text class="disc-subtitle">不同学科的研究日常各不相同</text>
+
+      <scroll-view class="disc-list" scroll-y style="max-height: 55vh;">
+        <view
+          wx:for="{{disciplines}}"
+          wx:key="id"
+          class="disc-card pixel-panel {{selectedDiscipline === item.id ? 'disc-selected' : ''}}"
+          data-discipline-id="{{item.id}}"
+          bindtap="onSelectDiscipline"
+        >
+          <view class="disc-header flex-row">
+            <text class="disc-icon">{{item.icon}}</text>
+            <text class="disc-name">{{item.name}}</text>
+          </view>
+          <view class="disc-flavor">
+            <text class="disc-desc">{{item.research}}</text>
+          </view>
+        </view>
+      </scroll-view>
+
+      <view class="disc-footer flex-between">
+        <view class="pixel-btn pixel-btn-small" bindtap="onCancelDiscipline">
+          返回
+        </view>
+        <text class="disc-tip">选择一个学科开始游戏</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 关于面板 -->
+  <view class="about-panel pixel-panel" wx:if="{{showAbout}}">
+    <text class="about-title">📖 关于学术生存指南</text>
+    <view class="about-content">
+      <text class="about-text">这是一个黑色幽默风格的博士生存模拟游戏。</text>
+      <text class="about-text">在这里，你将扮演一名博士生：</text>
+      <text class="about-text">· 在导师Push和论文Deadline之间求生</text>
+      <text class="about-text">· 面对实验失败、期刊拒稿等随机事件</text>
+      <text class="about-text">· 管理精力、论文进度、导师满意度和存款</text>
+      <text class="about-text">· 最终目标是——活着毕业 🎓</text>
+      <text class="about-text mt-16 text-dim">v1.0.0 · 由真实博士经历改编</text>
+      <text class="about-text text-dim">"这游戏演我！" —— 广大博士生</text>
+    </view>
+    <view class="pixel-btn pixel-btn-small" bindtap="onToggleAbout" style="margin-top: 16rpx;">
+      关闭
+    </view>
+  </view>
+
+  <!-- 底部版本号 -->
+  <view class="footer">
+    <text class="footer-text">v1.0.0 · Made with 💔 by PhDs</text>
+  </view>
+</view>

@@ -1,0 +1,44 @@
+<view class="event-overlay {{visible ? 'overlay-visible' : ''}}" wx:if="{{event}}">
+  <view class="event-modal pixel-panel">
+
+    <!-- 事件标题 -->
+    <view class="event-header">
+      <text class="event-type-badge {{event.type}}">
+        {{event.type === 'positive' ? '好事' : event.type === 'negative' ? '坏事' : '中性'}}
+      </text>
+      <text class="event-title pixel-text-glow">{{event.title}}</text>
+    </view>
+
+    <!-- 事件描述 -->
+    <view class="event-body">
+      <text class="event-description">{{event.description}}</text>
+    </view>
+
+    <!-- 事件选项 -->
+    <view class="event-options">
+      <view
+        wx:for="{{optionsWithState}}"
+        wx:key="id"
+        class="event-option pixel-panel {{selectedOption === item.id ? 'option-selected' : ''}} {{!item._available ? 'option-disabled' : ''}}"
+        data-option-id="{{item.id}}"
+        bindtap="selectOption"
+      >
+        <text class="option-text">{{item.text}}</text>
+        <text class="option-requirement-hint" wx:if="{{item._requirementHint}}">（{{item._requirementHint}}）</text>
+        <view class="option-effects" wx:if="{{item.effects}}">
+          <block wx:for="{{item.effects}}" wx:for-item="val" wx:for-index="key" wx:key="key">
+            <text class="effect-tag {{val > 0 ? 'positive' : 'negative'}}">
+              {{key}} {{val > 0 ? '+' : ''}}{{val}}
+            </text>
+          </block>
+        </view>
+      </view>
+    </view>
+
+    <!-- 提示文字 -->
+    <view class="event-footer">
+      <text class="pixel-blink">▼ 请做出选择 ▼</text>
+    </view>
+
+  </view>
+</view>

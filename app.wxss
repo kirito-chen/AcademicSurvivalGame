@@ -1,0 +1,160 @@
+/**
+ * 学术生存指南 —— 全局像素风样式
+ * 复古 CRT 屏幕 + 像素边框 + 霓虹配色
+ */
+
+/* === 全局 CSS 变量（小程序用 page 定义） === */
+page {
+  --color-bg:        #1a1a2e;
+  --color-panel:     #16213e;
+  --color-panel-light: #1e2d50;
+  --color-border:    #e94560;
+  --color-border-dim: #7a2e3a;
+  --color-text:      #eeeeb8;
+  --color-text-dim:  #888866;
+  --color-accent:    #0f3460;
+  --color-success:   #53d769;
+  --color-danger:    #e94560;
+  --color-warning:   #ffc107;
+  --color-energy:    #00d4ff;
+  --color-paper:     #ff6b9d;
+  --color-advisor:   #c084fc;
+  --color-money:     #fbbf24;
+
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: monospace;
+  font-size: 28rpx;
+  line-height: 1.6;
+  -webkit-font-smoothing: none;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* === 像素按钮通用样式 === */
+.pixel-btn {
+  display: inline-block;
+  padding: 16rpx 32rpx;
+  border: 4rpx solid var(--color-border);
+  background: var(--color-panel);
+  color: var(--color-text);
+  font-family: monospace;
+  font-size: 28rpx;
+  text-align: center;
+  box-shadow:
+    4rpx 0 0 0 var(--color-bg),
+    0 4rpx 0 0 var(--color-bg),
+    2rpx 2rpx 0 0 var(--color-border-dim);
+  -webkit-font-smoothing: none;
+  transition: transform 0.05s, box-shadow 0.05s;
+}
+
+.pixel-btn:active {
+  transform: translate(2rpx, 2rpx);
+  box-shadow: none;
+}
+
+.pixel-btn.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* === 像素面板 === */
+.pixel-panel {
+  background: var(--color-panel);
+  border: 4rpx solid var(--color-border-dim);
+  padding: 24rpx;
+  box-shadow:
+    inset 0 0 20rpx rgba(0,0,0,0.3),
+    4rpx 4rpx 0 0 rgba(0,0,0,0.4);
+}
+
+/* === 像素进度条 === */
+.pixel-progress {
+  height: 20rpx;
+  background: #111;
+  border: 2rpx solid #555;
+  position: relative;
+  overflow: hidden;
+}
+
+.pixel-progress-fill {
+  height: 100%;
+  transition: width 0.3s steps(10);
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 4rpx,
+    rgba(0,0,0,0.3) 4rpx,
+    rgba(0,0,0,0.3) 6rpx
+  );
+}
+
+/* === 像素文本效果 === */
+.pixel-text {
+  -webkit-font-smoothing: none;
+  text-shadow: 2rpx 2rpx 0 rgba(0,0,0,0.5);
+}
+
+.pixel-text-glow {
+  text-shadow:
+    0 0 10rpx currentColor,
+    2rpx 2rpx 0 rgba(0,0,0,0.5);
+}
+
+/* === 闪烁动画 === */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.pixel-blink {
+  animation: blink 1s steps(2) infinite;
+}
+
+/* === 滚动条隐藏 === */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* === 通用工具类 === */
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.text-center { text-align: center; }
+.text-right  { text-align: right; }
+.text-danger { color: var(--color-danger); }
+.text-success { color: var(--color-success); }
+.text-warning { color: var(--color-warning); }
+.text-dim    { color: var(--color-text-dim); }
+
+.mt-8  { margin-top: 8rpx; }
+.mt-16 { margin-top: 16rpx; }
+.mt-24 { margin-top: 24rpx; }
+.mt-32 { margin-top: 32rpx; }
+.mb-8  { margin-bottom: 8rpx; }
+.mb-16 { margin-bottom: 16rpx; }
+.mb-24 { margin-bottom: 24rpx; }
+.p-16 { padding: 16rpx; }
+.p-24 { padding: 24rpx; }

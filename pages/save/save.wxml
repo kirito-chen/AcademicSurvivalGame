@@ -1,0 +1,44 @@
+<view class="save-page">
+  <view class="save-header">
+    <text class="save-title pixel-text">💾 存档管理</text>
+    <text class="save-hint">共 {{SAVE_SLOTS || 3}} 个存档槽位</text>
+  </view>
+
+  <!-- 存档槽位列表 -->
+  <view class="slot-list">
+    <view
+      wx:for="{{slots}}"
+      wx:key="slotId"
+      class="slot-card pixel-panel"
+      data-slot-id="{{index}}"
+      bindtap="onSlotTap"
+    >
+      <view class="slot-header flex-between">
+        <text class="slot-number">槽位 {{index + 1}}</text>
+        <text class="slot-status {{item ? 'status-used' : 'status-empty'}}">
+          {{item ? '● 已使用' : '○ 空'}}
+        </text>
+      </view>
+
+      <view class="slot-body" wx:if="{{item}}">
+        <text class="slot-label">{{item.label}}</text>
+        <view class="slot-meta flex-row" style="gap: 16rpx;">
+          <text class="slot-date">📅 第{{item.month}}个月</text>
+          <text class="slot-phase">📍 {{item.phase}}</text>
+        </view>
+        <text class="slot-time text-dim">保存时间：{{item.timestamp ? '已存档' : ''}}</text>
+      </view>
+
+      <view class="slot-body slot-empty-hint" wx:else>
+        <text class="pixel-blink">点击保存当前游戏</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部按钮 -->
+  <view class="save-footer">
+    <view class="pixel-btn" bindtap="onBack">
+      ← 返回
+    </view>
+  </view>
+</view>

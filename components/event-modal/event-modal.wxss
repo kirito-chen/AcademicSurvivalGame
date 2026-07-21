@@ -1,0 +1,165 @@
+/* 遮罩层 */
+.event-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.overlay-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* 模态框 */
+.event-modal {
+  width: 85vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 32rpx;
+  animation: modalIn 0.3s steps(8);
+}
+
+@keyframes modalIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.event-header {
+  text-align: center;
+  margin-bottom: 24rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 4rpx double var(--color-border);
+}
+
+.event-type-badge {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  font-family: monospace;
+  font-size: 20rpx;
+  margin-bottom: 12rpx;
+  -webkit-font-smoothing: none;
+  border: 2rpx solid;
+}
+
+.event-type-badge.positive {
+  color: var(--color-success);
+  border-color: var(--color-success);
+}
+
+.event-type-badge.negative {
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+.event-type-badge.neutral {
+  color: var(--color-warning);
+  border-color: var(--color-warning);
+}
+
+.event-title {
+  font-family: monospace;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: var(--color-text);
+  -webkit-font-smoothing: none;
+  line-height: 1.4;
+  display: block;
+}
+
+.event-body {
+  margin-bottom: 24rpx;
+  padding: 16rpx;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.event-description {
+  font-family: monospace;
+  font-size: 26rpx;
+  color: var(--color-text-dim);
+  -webkit-font-smoothing: none;
+  line-height: 1.8;
+}
+
+/* 选项列表 */
+.event-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.event-option {
+  padding: 20rpx;
+  border-color: var(--color-border-dim);
+  transition: all 0.15s;
+}
+
+.event-option:active {
+  transform: scale(0.97);
+  border-color: var(--color-border);
+}
+
+.option-selected {
+  border-color: var(--color-success) !important;
+  background: rgba(83, 215, 105, 0.1);
+}
+
+.option-disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.option-text {
+  font-family: monospace;
+  font-size: 28rpx;
+  color: var(--color-text);
+  -webkit-font-smoothing: none;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.option-effects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+}
+
+.effect-tag {
+  font-family: monospace;
+  font-size: 20rpx;
+  padding: 2rpx 8rpx;
+  -webkit-font-smoothing: none;
+}
+
+.effect-tag.positive {
+  color: var(--color-success);
+  border: 1rpx solid var(--color-success);
+}
+
+.effect-tag.negative {
+  color: var(--color-danger);
+  border: 1rpx solid var(--color-danger);
+}
+
+/* 底部提示 */
+.event-footer {
+  text-align: center;
+  padding-top: 16rpx;
+}
+
+.event-footer text {
+  font-family: monospace;
+  font-size: 22rpx;
+  color: var(--color-warning);
+  -webkit-font-smoothing: none;
+}

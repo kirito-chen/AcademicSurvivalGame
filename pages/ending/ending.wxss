@@ -1,0 +1,160 @@
+.ending-page {
+  min-height: 100vh;
+  padding: 48rpx 32rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ending-victory {
+  background: linear-gradient(180deg, #1a2e1a 0%, #0f1a0f 100%);
+}
+
+.ending-failure {
+  background: linear-gradient(180deg, #2e1a1a 0%, #1a0f0f 100%);
+}
+
+/* 主视觉 */
+.ending-hero {
+  text-align: center;
+  margin-bottom: 32rpx;
+}
+
+.ending-emoji {
+  font-size: 80rpx;
+  display: block;
+  margin-bottom: 16rpx;
+  animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12rpx); }
+}
+
+.ending-title {
+  font-family: monospace;
+  font-size: 40rpx;
+  font-weight: bold;
+  color: var(--color-text);
+  -webkit-font-smoothing: none;
+  display: block;
+  line-height: 1.4;
+}
+
+.ending-grade {
+  margin-top: 16rpx;
+}
+
+.grade-label {
+  font-family: monospace;
+  font-size: 20rpx;
+  color: var(--color-text-dim);
+  -webkit-font-smoothing: none;
+  display: block;
+}
+
+.grade-value {
+  font-family: monospace;
+  font-size: 56rpx;
+  font-weight: bold;
+  color: var(--color-warning);
+  -webkit-font-smoothing: none;
+}
+
+/* 结局描述 */
+.ending-desc {
+  width: 100%;
+  max-width: 500rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  text-align: center;
+}
+
+.desc-text {
+  font-family: monospace;
+  font-size: 26rpx;
+  color: var(--color-text);
+  -webkit-font-smoothing: none;
+  line-height: 1.8;
+}
+
+/* 趣味点评 */
+.ending-flavor {
+  width: 100%;
+  max-width: 500rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  border-color: var(--color-warning);
+}
+
+.flavor-label {
+  font-family: monospace;
+  font-size: 24rpx;
+  color: var(--color-warning);
+  -webkit-font-smoothing: none;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.flavor-text {
+  font-family: monospace;
+  font-size: 24rpx;
+  color: var(--color-text-dim);
+  -webkit-font-smoothing: none;
+  line-height: 1.8;
+}
+
+/* 统计数据 */
+.ending-stats {
+  width: 100%;
+  max-width: 500rpx;
+  padding: 24rpx;
+  margin-bottom: 32rpx;
+}
+
+.stats-title {
+  font-family: monospace;
+  font-size: 24rpx;
+  color: var(--color-warning);
+  -webkit-font-smoothing: none;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16rpx;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 12rpx;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.stat-label {
+  font-family: monospace;
+  font-size: 20rpx;
+  color: var(--color-text-dim);
+  -webkit-font-smoothing: none;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.stat-value {
+  font-family: monospace;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--color-text);
+  -webkit-font-smoothing: none;
+}
+
+/* 操作按钮 */
+.ending-actions {
+  width: 100%;
+  max-width: 400rpx;
+  text-align: center;
+  margin-top: 16rpx;
+}

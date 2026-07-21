@@ -1,0 +1,128 @@
+.game-page {
+  min-height: 100vh;
+  height: 100vh;
+  padding: 16rpx 20rpx;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 操作反馈弹窗 */
+.action-toast {
+  position: fixed;
+  top: 20rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.toast-visible {
+  opacity: 1;
+}
+
+.toast-content {
+  padding: 12rpx 28rpx;
+  border-color: var(--color-warning);
+  background: rgba(26, 26, 46, 0.95);
+  max-width: 80vw;
+}
+
+.toast-text {
+  font-family: monospace;
+  font-size: 24rpx;
+  color: var(--color-warning);
+  -webkit-font-smoothing: none;
+  line-height: 1.4;
+}
+
+/* 主操作区（决策网格 + 按钮栏） */
+.main-actions {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12rpx;
+  margin: 8rpx 0;
+  min-height: 0;
+}
+
+/* 决策网格：3列 + 2列 */
+.decisions-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  justify-content: center;
+}
+
+.decisions-grid > decision-card {
+  flex: 0 0 calc(33.33% - 8rpx);
+  max-width: calc(33.33% - 8rpx);
+}
+
+/* 后2个居中 */
+.decisions-grid > decision-card:nth-child(4),
+.decisions-grid > decision-card:nth-child(5) {
+  flex: 0 0 calc(33.33% - 8rpx);
+}
+
+/* 按钮栏 */
+.bottom-bar {
+  padding: 8rpx 0;
+  border-top: 1rpx dashed var(--color-border-dim);
+  flex-shrink: 0;
+}
+
+/* 紧凑日志区 */
+.compact-log {
+  flex-shrink: 0;
+  margin-top: 4rpx;
+}
+
+/* 游戏结束遮罩 */
+.game-over-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.game-over-content {
+  text-align: center;
+  padding: 48rpx;
+}
+
+.go-title {
+  font-family: monospace;
+  font-size: 40rpx;
+  font-weight: bold;
+  color: var(--color-text);
+  -webkit-font-smoothing: none;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.go-desc {
+  font-family: monospace;
+  font-size: 26rpx;
+  color: var(--color-text-dim);
+  -webkit-font-smoothing: none;
+  display: block;
+  margin-bottom: 32rpx;
+  line-height: 1.6;
+}
+
+.go-hint {
+  font-family: monospace;
+  font-size: 22rpx;
+  color: var(--color-warning);
+  -webkit-font-smoothing: none;
+}

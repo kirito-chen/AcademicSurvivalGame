@@ -1,0 +1,7 @@
+<view
+  class="pixel-btn pixel-btn-{{size}} pixel-btn-{{theme}} {{block ? 'pixel-btn-block' : ''}} {{disabled ? 'pixel-btn-disabled' : ''}} {{customClass}}"
+  bindtap="onTap"
+>
+  <slot></slot>
+  <text wx:if="{{text}}">{{text}}</text>
+</view>

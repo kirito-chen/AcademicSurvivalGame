@@ -1,0 +1,63 @@
+<view class="ending-page {{gradeClass}}">
+  <!-- 结局主视觉 -->
+  <view class="ending-hero">
+    <text class="ending-emoji">{{gradeEmoji}}</text>
+    <text class="ending-title pixel-text-glow">{{ending.title}}</text>
+    <view class="ending-grade" wx:if="{{ending.grade}}">
+      <text class="grade-label">结局评级</text>
+      <text class="grade-value">{{ending.grade}}</text>
+    </view>
+  </view>
+
+  <!-- 结局描述 -->
+  <view class="ending-desc pixel-panel">
+    <text class="desc-text">{{ending.description}}</text>
+  </view>
+
+  <!-- 趣味点评 -->
+  <view class="ending-flavor pixel-panel" wx:if="{{ending.flavorText}}">
+    <text class="flavor-label">📝 编者按</text>
+    <text class="flavor-text">{{ending.flavorText}}</text>
+  </view>
+
+  <!-- 统计数据 -->
+  <view class="ending-stats pixel-panel" wx:if="{{ending.stats}}">
+    <text class="stats-title">📊 学术生涯统计</text>
+    <view class="stats-grid">
+      <view class="stat-item">
+        <text class="stat-label">经过月份</text>
+        <text class="stat-value">{{ending.stats.month}}</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-label">最终论文进度</text>
+        <text class="stat-value">{{ending.stats.paperProgress}}%</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-label">论文发表数</text>
+        <text class="stat-value">{{ending.stats.totalPapersPublished || 0}}</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-label">实验失败次数</text>
+        <text class="stat-value">{{ending.stats.totalExperimentsFailed || 0}}</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-label">开会次数</text>
+        <text class="stat-value">{{ending.stats.totalMeetingsAttended || 0}}</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-label">经历事件数</text>
+        <text class="stat-value">{{ending.stats.eventHistory ? ending.stats.eventHistory.length : 0}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="ending-actions">
+    <view class="pixel-btn pixel-btn-large" bindtap="onPlayAgain">
+      🔄 再来一局
+    </view>
+    <view class="pixel-btn pixel-btn-large mt-24" bindtap="onBackHome">
+      🏠 返回首页
+    </view>
+  </view>
+</view>

@@ -1,0 +1,119 @@
+.save-page {
+  min-height: 100vh;
+  padding: 32rpx;
+  background: var(--color-bg);
+}
+
+.save-header {
+  text-align: center;
+  margin-bottom: 32rpx;
+}
+
+.save-title {
+  font-family: monospace;
+  font-size: 40rpx;
+  font-weight: bold;
+  color: var(--color-text);
+  -webkit-font-smoothing: none;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.save-hint {
+  font-family: monospace;
+  font-size: 22rpx;
+  color: var(--color-text-dim);
+  -webkit-font-smoothing: none;
+}
+
+/* 槽位列表 */
+.slot-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.slot-card {
+  padding: 24rpx;
+  transition: all 0.1s;
+}
+
+.slot-card:active {
+  transform: scale(0.98);
+  border-color: var(--color-border);
+}
+
+.slot-header {
+  margin-bottom: 12rpx;
+}
+
+.slot-number {
+  font-family: monospace;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: var(--color-text);
+  -webkit-font-smoothing: none;
+}
+
+.slot-status {
+  font-family: monospace;
+  font-size: 22rpx;
+  -webkit-font-smoothing: none;
+}
+
+.status-used {
+  color: var(--color-success);
+}
+
+.status-empty {
+  color: var(--color-text-dim);
+}
+
+.slot-body {
+  padding: 12rpx;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.slot-label {
+  font-family: monospace;
+  font-size: 24rpx;
+  color: var(--color-warning);
+  -webkit-font-smoothing: none;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.slot-meta {
+  margin-bottom: 4rpx;
+}
+
+.slot-date, .slot-phase {
+  font-family: monospace;
+  font-size: 22rpx;
+  color: var(--color-text-dim);
+  -webkit-font-smoothing: none;
+}
+
+.slot-time {
+  font-family: monospace;
+  font-size: 20rpx;
+  -webkit-font-smoothing: none;
+}
+
+.slot-empty-hint {
+  text-align: center;
+  padding: 24rpx;
+}
+
+.slot-empty-hint text {
+  font-family: monospace;
+  font-size: 24rpx;
+  color: var(--color-text-dim);
+  -webkit-font-smoothing: none;
+}
+
+/* 底部 */
+.save-footer {
+  margin-top: 48rpx;
+  text-align: center;
+}

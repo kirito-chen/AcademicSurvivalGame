@@ -1,0 +1,24 @@
+<view class="resource-bar {{size}} {{statusClass}}">
+  <view class="resource-header flex-between">
+    <view class="resource-label flex-row">
+      <text class="resource-icon">{{icon}}</text>
+      <text class="resource-name">{{label}}</text>
+    </view>
+    <view class="resource-info" wx:if="{{showNumber}}">
+      <text class="resource-value">{{value}}</text>
+      <text class="resource-max">/{{max}}</text>
+      <text class="resource-percent" wx:if="{{showPercent}}">({{percent}}%)</text>
+    </view>
+  </view>
+  <view class="pixel-progress">
+    <view
+      class="pixel-progress-fill {{statusClass}}"
+      style="width: {{percent}}%; background-color: {{barColor}};"
+    ></view>
+  </view>
+  <view class="recent-delta" wx:if="{{recentDelta !== 0}}">
+    <text class="{{recentDelta > 0 ? 'text-success' : 'text-danger'}}">
+      {{recentDelta > 0 ? '+' : ''}}{{recentDelta}}
+    </text>
+  </view>
+</view>

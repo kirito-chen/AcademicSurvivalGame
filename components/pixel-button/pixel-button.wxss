@@ -1,0 +1,66 @@
+.pixel-btn {
+  display: inline-block;
+  padding: 16rpx 32rpx;
+  border: 4rpx solid var(--color-border);
+  background: var(--color-panel);
+  color: var(--color-text);
+  font-family: monospace;
+  font-size: 28rpx;
+  text-align: center;
+  -webkit-font-smoothing: none;
+  box-shadow:
+    4rpx 0 0 0 var(--color-bg),
+    0 4rpx 0 0 var(--color-bg),
+    2rpx 2rpx 0 0 var(--color-border-dim);
+  transition: all 0.08s;
+  cursor: pointer;
+  user-select: none;
+}
+
+.pixel-btn:active {
+  transform: translate(2rpx, 2rpx);
+  box-shadow: none;
+}
+
+.pixel-btn-block {
+  display: block;
+  width: 100%;
+}
+
+.pixel-btn-disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* 尺寸变体 */
+.pixel-btn-small {
+  padding: 8rpx 20rpx;
+  font-size: 24rpx;
+}
+
+.pixel-btn-large {
+  padding: 24rpx 48rpx;
+  font-size: 32rpx;
+  border-width: 6rpx;
+}
+
+/* 颜色主题 */
+.pixel-btn-primary {
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.pixel-btn-danger {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+.pixel-btn-success {
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.pixel-btn-warning {
+  border-color: var(--color-warning);
+  color: var(--color-warning);
+}

@@ -1,0 +1,84 @@
+.resource-bar {
+  margin-bottom: 8rpx;
+}
+
+.resource-bar.small {
+  font-size: 22rpx;
+}
+
+.resource-bar.small .pixel-progress {
+  height: 12rpx;
+}
+
+.resource-header {
+  margin-bottom: 4rpx;
+}
+
+.resource-label {
+  gap: 8rpx;
+}
+
+.resource-icon {
+  font-size: 28rpx;
+}
+
+.small .resource-icon {
+  font-size: 20rpx;
+}
+
+.resource-name {
+  color: var(--color-text);
+  font-family: monospace;
+  -webkit-font-smoothing: none;
+}
+
+.resource-info {
+  font-family: monospace;
+  -webkit-font-smoothing: none;
+}
+
+.resource-value {
+  color: var(--color-text);
+  font-weight: bold;
+  font-size: 28rpx;
+}
+
+.resource-max {
+  color: var(--color-text-dim);
+  font-size: 22rpx;
+}
+
+.resource-percent {
+  color: var(--color-text-dim);
+  font-size: 20rpx;
+  margin-left: 4rpx;
+}
+
+.pixel-progress {
+  height: 20rpx;
+  background: #0a0a14;
+  border: 2rpx solid #333;
+  position: relative;
+  overflow: hidden;
+}
+
+.pixel-progress-fill {
+  height: 100%;
+  transition: width 0.4s steps(10);
+}
+
+.pixel-progress-fill.danger {
+  animation: dangerPulse 0.5s steps(2) infinite;
+}
+
+@keyframes dangerPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.recent-delta {
+  font-size: 20rpx;
+  font-family: monospace;
+  text-align: right;
+  margin-top: 2rpx;
+}

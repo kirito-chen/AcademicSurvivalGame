@@ -1,0 +1,22 @@
+<scroll-view
+  class="game-log-container"
+  scroll-y
+  scroll-top="{{scrollTop}}"
+  scroll-with-animation
+  style="max-height: {{maxHeight}}rpx;"
+>
+  <view class="log-list">
+    <view
+      wx:for="{{logs}}"
+      wx:key="index"
+      class="log-item log-{{item.type}}"
+    >
+      <text class="log-day" wx:if="{{item.month > 0}}">[第{{item.month}}月]</text>
+      <text class="log-text">{{item.text}}</text>
+    </view>
+    <!-- 空状态 -->
+    <view class="log-empty" wx:if="{{logs.length === 0}}">
+      <text class="pixel-blink">等待游戏开始...</text>
+    </view>
+  </view>
+</scroll-view>

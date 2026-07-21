@@ -1,0 +1,51 @@
+.decision-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16rpx 12rpx;
+  min-height: 120rpx;
+  transition: all 0.1s;
+}
+
+.decision-card:active {
+  transform: scale(0.95);
+  opacity: 0.8;
+}
+
+.decision-disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.decision-icon {
+  font-size: 40rpx;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.decision-name {
+  font-family: monospace;
+  font-size: 26rpx;
+  font-weight: bold;
+  color: var(--color-text);
+  -webkit-font-smoothing: none;
+  text-align: center;
+}
+
+.decision-badge {
+  margin-top: 4rpx;
+  padding: 0rpx 8rpx;
+  border: 1rpx solid var(--color-border-dim);
+}
+
+.decision-badge:not(.badge-category) {
+  border-color: var(--color-danger);
+}
+
+.badge-text {
+  font-family: monospace;
+  font-size: 18rpx;
+  color: var(--color-text-dim);
+  -webkit-font-smoothing: none;
+}

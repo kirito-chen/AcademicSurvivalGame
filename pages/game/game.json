@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "status-bar": "../../components/status-bar/status-bar",
+    "decision-card": "../../components/decision-card/decision-card",
+    "event-modal": "../../components/event-modal/event-modal",
+    "game-log": "../../components/game-log/game-log"
+  }
+}
