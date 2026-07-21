@@ -106,17 +106,17 @@ class GameEngine {
   }
 
   /**
-   * 打出手牌
+   * 打出多张手牌
    */
-  playCard(handIndex) {
-    return this.runManager.playCard(handIndex)
+  playCards(handIndices) {
+    return this.runManager.playCards(handIndices)
   }
 
   /**
-   * 结算回合
+   * 弃牌
    */
-  finishRound() {
-    return this.runManager.finishRound()
+  discardCards(handIndices) {
+    return this.runManager.discardCards(handIndices)
   }
 
   /**

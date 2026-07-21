@@ -94,7 +94,11 @@ class ShopGenerator {
    * 生成单张技能卡
    */
   _generateSkill(rarityWeights, usedIds) {
-    const rarity = weightedRandom(rarityWeights)
+    // 将对象格式的权重转为 weightedRandom 需要的数组格式
+    const weightArray = Object.entries(rarityWeights)
+      .filter(([, w]) => w > 0)
+      .map(([rarity, weight]) => ({ item: rarity, weight }))
+    const rarity = weightedRandom(weightArray)
     if (!rarity) return null
 
     const pool = skillsConfig.getByRarity(rarity).filter(s => !usedIds.has(s.id))

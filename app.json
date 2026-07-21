@@ -7,7 +7,7 @@
     "pages/ending/ending"
   ],
   "window": {
-    "navigationBarTitleText": "学术 Roguelike",
+    "navigationBarTitleText": "小丑牌-学术版",
     "navigationBarBackgroundColor": "#1a1a2e",
     "navigationBarTextStyle": "white",
     "backgroundColor": "#1a1a2e",

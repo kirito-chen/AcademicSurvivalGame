@@ -86,7 +86,7 @@ module.exports = [
     description: '一回合中打出全部 5 种类型的卡',
     icon: '🌈',
     category: 'deck',
-    condition: (runResult) => runResult.stats && runResult.stats.allTypesPlayed === true
+    condition: (runResult) => runResult.stats && runResult.stats.allSuitsPlayed === true
   },
 
   // ===== 难度类 =====

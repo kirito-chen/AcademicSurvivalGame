@@ -1,497 +1,93 @@
 /**
- * 学术 Roguelike —— 研究方法卡牌库
- * 30 张基础研究方法卡，分为 5 种类型
+ * 小丑牌-学术版 —— 研究方法卡牌库
  *
- * 类型: experiment(实验) / writing(写作) / analysis(数据分析) / social(社交) / teaching(教学)
+ * 每张卡 = rank(学术价值等级) + suit(研究领域)
  *
- * 每张卡字段:
- *   id             - 唯一标识
- *   name           - 中文名称
- *   icon           - emoji 图标
- *   type           - 卡牌类型
- *   baseProduction - 基础学术产出 (chips)
- *   energyCost     - 精力消耗
- *   tags           - 标签数组 (用于技能卡匹配)
- *   effects        - 特殊效果数组 (可选)
- *   rarity         - 稀有度: basic / uncommon / rare
- *   upgradeLevel   - 已升级次数 (初始0)
- *   maxUpgrade     - 最大升级次数
+ * rank: 2~10, J(创新点), Q(理论贡献), K(实验验证), A(突破发现)
+ * suit: experiment(实验🔬) / writing(写作📝) / analysis(分析📊) / social(社交🤝)
+ *
+ * rank值映射 chips: 2=2 ... 10=10, J/Q/K=10, A=11
  */
+
+const RANK_VALUES = {
+  '2': 2, '3': 3, '4': 4, '5': 5,
+  '6': 6, '7': 7, '8': 8, '9': 9, '10': 10,
+  'J': 10, 'Q': 10, 'K': 10, 'A': 11
+}
 
 module.exports = [
-  // ==================== 实验类 (8张) ====================
-  {
-    id: 'controlled_experiment',
-    name: '对照实验',
-    icon: '🔬',
-    type: 'experiment',
-    baseProduction: 15,
-    energyCost: 8,
-    tags: ['basic', 'reliable'],
-    rarity: 'basic',
-    effects: [],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'pilot_study',
-    name: '预实验',
-    icon: '🧪',
-    type: 'experiment',
-    baseProduction: 8,
-    energyCost: 4,
-    tags: ['basic', 'cheap'],
-    rarity: 'basic',
-    effects: [],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'lab_rush',
-    name: '疯狂实验',
-    icon: '⚗️',
-    type: 'experiment',
-    baseProduction: 22,
-    energyCost: 15,
-    tags: ['risky', 'high_yield'],
-    rarity: 'uncommon',
-    effects: [
-      { type: 'random_bonus', range: [-5, 10], desc: '随机产出修正：-5 ~ +10' }
-    ],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'field_study',
-    name: '田野调查',
-    icon: '🌿',
-    type: 'experiment',
-    baseProduction: 12,
-    energyCost: 10,
-    tags: ['field', 'combo'],
-    rarity: 'basic',
-    effects: [
-      { type: 'type_combo', bonusType: 'social', bonus: 5, desc: '本回合若打出社交卡，此卡 +5 产出' }
-    ],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'replication_study',
-    name: '重复验证',
-    icon: '🔄',
-    type: 'experiment',
-    baseProduction: 14,
-    energyCost: 7,
-    tags: ['reliable', 'chain'],
-    rarity: 'basic',
-    effects: [
-      { type: 'chain_bonus', count: 2, bonus: 8, desc: '连续打出 2 张实验卡时，+8 产出' }
-    ],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'collaboration_exp',
-    name: '合作实验',
-    icon: '🤝',
-    type: 'experiment',
-    baseProduction: 18,
-    energyCost: 10,
-    tags: ['collab', 'social_hybrid'],
-    rarity: 'uncommon',
-    effects: [
-      { type: 'self_buff', buffType: 'social', buffAmount: 5, desc: '本回合社交卡 +5 产出' }
-    ],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'equipment_rental',
-    name: '借用设备',
-    icon: '🔧',
-    type: 'experiment',
-    baseProduction: 18,
-    energyCost: 12,
-    tags: ['expensive', 'high_yield'],
-    rarity: 'uncommon',
-    effects: [
-      { type: 'cost_funding', amount: 50, desc: '消耗 50 经费' }
-    ],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'serendipity',
-    name: '意外发现',
-    icon: '💡',
-    type: 'experiment',
-    baseProduction: 10,
-    energyCost: 6,
-    tags: ['random', 'fun'],
-    rarity: 'uncommon',
-    effects: [
-      { type: 'random_draw', count: 1, desc: '随机抽 1 张牌' }
-    ],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
+  // ==================== 实验 (experiment) - 13张 ====================
+  { id: 'exp_2',  name: '试错实验',   icon: '🧪', suit: 'experiment', rank: '2',  energyCost: 3,  tags: ['basic'] },
+  { id: 'exp_3',  name: '简单测量',   icon: '📏', suit: 'experiment', rank: '3',  energyCost: 4,  tags: ['basic'] },
+  { id: 'exp_4',  name: '条件实验',   icon: '⚗️', suit: 'experiment', rank: '4',  energyCost: 5,  tags: ['basic'] },
+  { id: 'exp_5',  name: '对照实验',   icon: '🔬', suit: 'experiment', rank: '5',  energyCost: 6,  tags: ['basic', 'reliable'] },
+  { id: 'exp_6',  name: '系统测试',   icon: '🧫', suit: 'experiment', rank: '6',  energyCost: 7,  tags: ['basic'] },
+  { id: 'exp_7',  name: '重复验证',   icon: '🔄', suit: 'experiment', rank: '7',  energyCost: 8,  tags: ['reliable'] },
+  { id: 'exp_8',  name: '田野调查',   icon: '🌿', suit: 'experiment', rank: '8',  energyCost: 9,  tags: ['field'] },
+  { id: 'exp_9',  name: '精密实验',   icon: '🎯', suit: 'experiment', rank: '9',  energyCost: 10, tags: ['quality'] },
+  { id: 'exp_10', name: '大型实验',   icon: '🏗️', suit: 'experiment', rank: '10', energyCost: 12, tags: ['high_yield'] },
+  { id: 'exp_J',  name: '方法创新',   icon: '💡', suit: 'experiment', rank: 'J',  energyCost: 11, tags: ['innovation'] },
+  { id: 'exp_Q',  name: '理论驱动实验', icon: '🧠', suit: 'experiment', rank: 'Q',  energyCost: 12, tags: ['theory'] },
+  { id: 'exp_K',  name: '验证性实验', icon: '✅', suit: 'experiment', rank: 'K',  energyCost: 13, tags: ['validation'] },
+  { id: 'exp_A',  name: '突破性发现', icon: '🌟', suit: 'experiment', rank: 'A',  energyCost: 15, tags: ['breakthrough'] },
 
-  // ==================== 写作类 (8张) ====================
-  {
-    id: 'draft_writing',
-    name: '草稿撰写',
-    icon: '📝',
-    type: 'writing',
-    baseProduction: 12,
-    energyCost: 6,
-    tags: ['basic', 'reliable'],
-    rarity: 'basic',
-    effects: [],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'literature_review',
-    name: '文献综述',
-    icon: '📚',
-    type: 'writing',
-    baseProduction: 10,
-    energyCost: 5,
-    tags: ['basic', 'setup'],
-    rarity: 'basic',
-    effects: [
-      { type: 'next_card_bonus', bonusType: 'writing', bonus: 5, desc: '下一张写作卡 +5 产出' }
-    ],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'polished_manuscript',
-    name: '精修文稿',
-    icon: '✨',
-    type: 'writing',
-    baseProduction: 18,
-    energyCost: 10,
-    tags: ['quality', 'high_yield'],
-    rarity: 'uncommon',
-    effects: [],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'abstract_writing',
-    name: '摘要速写',
-    icon: '📋',
-    type: 'writing',
-    baseProduction: 6,
-    energyCost: 3,
-    tags: ['cheap', 'draw'],
-    rarity: 'basic',
-    effects: [
-      { type: 'draw_cards', count: 1, desc: '抽 1 张牌' }
-    ],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'latex_formatting',
-    name: 'LaTeX 排版',
-    icon: '💻',
-    type: 'writing',
-    baseProduction: 8,
-    energyCost: 8,
-    tags: ['tech', 'mult'],
-    rarity: 'uncommon',
-    effects: [
-      { type: 'add_mult', amount: 3, desc: '本回合 +3 倍率' }
-    ],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'figure_making',
-    name: '图表制作',
-    icon: '📊',
-    type: 'writing',
-    baseProduction: 14,
-    energyCost: 7,
-    tags: ['visual', 'reliable'],
-    rarity: 'basic',
-    effects: [],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'rebuttal_letter',
-    name: '回复审稿意见',
-    icon: '✉️',
-    type: 'writing',
-    baseProduction: 20,
-    energyCost: 12,
-    tags: ['late_game', 'powerful'],
-    rarity: 'rare',
-    effects: [
-      { type: 'require_previous', cardType: 'experiment', desc: '需要本回合已打出实验卡' }
-    ],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'grant_writing',
-    name: '基金申请书',
-    icon: '🎯',
-    type: 'writing',
-    baseProduction: 16,
-    energyCost: 14,
-    tags: ['funding', 'expensive'],
-    rarity: 'uncommon',
-    effects: [
-      { type: 'gain_funding', amount: 200, desc: '获得 200 经费' }
-    ],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
+  // ==================== 写作 (writing) - 13张 ====================
+  { id: 'wrt_2',  name: '草稿笔记',   icon: '🗒️', suit: 'writing', rank: '2',  energyCost: 3,  tags: ['basic'] },
+  { id: 'wrt_3',  name: '段落练习',   icon: '✏️', suit: 'writing', rank: '3',  energyCost: 4,  tags: ['basic'] },
+  { id: 'wrt_4',  name: '摘要速写',   icon: '📋', suit: 'writing', rank: '4',  energyCost: 4,  tags: ['basic'] },
+  { id: 'wrt_5',  name: '文献综述',   icon: '📚', suit: 'writing', rank: '5',  energyCost: 5,  tags: ['basic', 'setup'] },
+  { id: 'wrt_6',  name: '图表制作',   icon: '📊', suit: 'writing', rank: '6',  energyCost: 6,  tags: ['visual'] },
+  { id: 'wrt_7',  name: '方法论写作', icon: '📐', suit: 'writing', rank: '7',  energyCost: 7,  tags: ['reliable'] },
+  { id: 'wrt_8',  name: 'LaTeX排版',  icon: '💻', suit: 'writing', rank: '8',  energyCost: 8,  tags: ['tech'] },
+  { id: 'wrt_9',  name: '精修文稿',   icon: '✨', suit: 'writing', rank: '9',  energyCost: 9,  tags: ['quality'] },
+  { id: 'wrt_10', name: '长篇论述',   icon: '📝', suit: 'writing', rank: '10', energyCost: 11, tags: ['high_yield'] },
+  { id: 'wrt_J',  name: '创新观点',   icon: '💭', suit: 'writing', rank: 'J',  energyCost: 10, tags: ['innovation'] },
+  { id: 'wrt_Q',  name: '理论框架',   icon: '🏛️', suit: 'writing', rank: 'Q',  energyCost: 12, tags: ['theory'] },
+  { id: 'wrt_K',  name: '验证报告',   icon: '📄', suit: 'writing', rank: 'K',  energyCost: 11, tags: ['validation'] },
+  { id: 'wrt_A',  name: '里程碑论文', icon: '📗', suit: 'writing', rank: 'A',  energyCost: 14, tags: ['breakthrough'] },
 
-  // ==================== 数据分析类 (6张) ====================
-  {
-    id: 'statistical_test',
-    name: '统计检验',
-    icon: '📈',
-    type: 'analysis',
-    baseProduction: 13,
-    energyCost: 7,
-    tags: ['basic', 'reliable'],
-    rarity: 'basic',
-    effects: [],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'data_mining',
-    name: '数据挖掘',
-    icon: '⛏️',
-    type: 'analysis',
-    baseProduction: 17,
-    energyCost: 9,
-    tags: ['high_yield', 'random'],
-    rarity: 'uncommon',
-    effects: [
-      { type: 'random_bonus', range: [0, 10], desc: '随机额外产出 0~10' }
-    ],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'code_debugging',
-    name: '代码调试',
-    icon: '🐛',
-    type: 'analysis',
-    baseProduction: 8,
-    energyCost: 12,
-    tags: ['setup', 'tech'],
-    rarity: 'basic',
-    effects: [
-      { type: 'next_card_bonus', bonusType: 'analysis', bonus: 10, desc: '下一张数据分析卡 +10 产出' }
-    ],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'visualization',
-    name: '数据可视化',
-    icon: '🎨',
-    type: 'analysis',
-    baseProduction: 11,
-    energyCost: 5,
-    tags: ['mult', 'cheap'],
-    rarity: 'uncommon',
-    effects: [
-      { type: 'add_mult', amount: 2, desc: '本回合 +2 倍率' }
-    ],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'meta_analysis',
-    name: '元分析',
-    icon: '🔍',
-    type: 'analysis',
-    baseProduction: 22,
-    energyCost: 14,
-    tags: ['powerful', 'late_game'],
-    rarity: 'rare',
-    effects: [
-      { type: 'bonus_per_card_type', bonusPerType: 3, desc: '牌组中每种类型 +3 产出' }
-    ],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'machine_learning',
-    name: '机器学习建模',
-    icon: '🤖',
-    type: 'analysis',
-    baseProduction: 19,
-    energyCost: 11,
-    tags: ['tech', 'high_yield'],
-    rarity: 'uncommon',
-    effects: [
-      { type: 'random_bonus', range: [-3, 15], desc: '随机产出修正：-3 ~ +15' }
-    ],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
+  // ==================== 分析 (analysis) - 13张 ====================
+  { id: 'anl_2',  name: '数据录入',   icon: '⌨️', suit: 'analysis', rank: '2',  energyCost: 3,  tags: ['basic'] },
+  { id: 'anl_3',  name: '简单统计',   icon: '📈', suit: 'analysis', rank: '3',  energyCost: 4,  tags: ['basic'] },
+  { id: 'anl_4',  name: '数据清洗',   icon: '🧹', suit: 'analysis', rank: '4',  energyCost: 5,  tags: ['basic'] },
+  { id: 'anl_5',  name: '统计检验',   icon: '📉', suit: 'analysis', rank: '5',  energyCost: 6,  tags: ['basic', 'reliable'] },
+  { id: 'anl_6',  name: '代码调试',   icon: '🐛', suit: 'analysis', rank: '6',  energyCost: 8,  tags: ['tech'] },
+  { id: 'anl_7',  name: '数据可视化', icon: '🎨', suit: 'analysis', rank: '7',  energyCost: 6,  tags: ['visual'] },
+  { id: 'anl_8',  name: '模型拟合',   icon: '📐', suit: 'analysis', rank: '8',  energyCost: 9,  tags: ['quality'] },
+  { id: 'anl_9',  name: '数据挖掘',   icon: '⛏️', suit: 'analysis', rank: '9',  energyCost: 10, tags: ['high_yield'] },
+  { id: 'anl_10', name: '机器学习建模', icon: '🤖', suit: 'analysis', rank: '10', energyCost: 12, tags: ['tech', 'high_yield'] },
+  { id: 'anl_J',  name: '新算法设计', icon: '🔮', suit: 'analysis', rank: 'J',  energyCost: 11, tags: ['innovation'] },
+  { id: 'anl_Q',  name: '理论推导',   icon: '📝', suit: 'analysis', rank: 'Q',  energyCost: 13, tags: ['theory'] },
+  { id: 'anl_K',  name: '结果验证',   icon: '✅', suit: 'analysis', rank: 'K',  energyCost: 10, tags: ['validation'] },
+  { id: 'anl_A',  name: '重大发现',   icon: '💎', suit: 'analysis', rank: 'A',  energyCost: 14, tags: ['breakthrough'] },
 
-  // ==================== 社交类 (5张) ====================
-  {
-    id: 'group_meeting',
-    name: '组会汇报',
-    icon: '👥',
-    type: 'social',
-    baseProduction: 9,
-    energyCost: 5,
-    tags: ['basic', 'advisor'],
-    rarity: 'basic',
-    effects: [
-      { type: 'advisor_gain', amount: 5, desc: '导师满意度 +5' }
-    ],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'conference_talk',
-    name: '会议演讲',
-    icon: '🎤',
-    type: 'social',
-    baseProduction: 15,
-    energyCost: 10,
-    tags: ['powerful', 'setup'],
-    rarity: 'uncommon',
-    effects: [
-      { type: 'next_card_bonus', bonusType: 'any', bonus: 8, desc: '下一张任意卡 +8 产出' }
-    ],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'advisor_meeting',
-    name: '导师面谈',
-    icon: '👨‍🏫',
-    type: 'social',
-    baseProduction: 5,
-    energyCost: 3,
-    tags: ['advisor', 'cheap'],
-    rarity: 'basic',
-    effects: [
-      { type: 'advisor_mult', amount: 2, desc: '本回合导师满意度收益翻倍' }
-    ],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'cross_group_collab',
-    name: '跨组合作',
-    icon: '🌐',
-    type: 'social',
-    baseProduction: 12,
-    energyCost: 8,
-    tags: ['collab', 'random'],
-    rarity: 'uncommon',
-    effects: [
-      { type: 'random_card', rarity: 'basic', desc: '获得 1 张随机基础卡加入牌组' }
-    ],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'academic_networking',
-    name: '学术社交',
-    icon: '🍷',
-    type: 'social',
-    baseProduction: 7,
-    energyCost: 4,
-    tags: ['shop', 'economy'],
-    rarity: 'uncommon',
-    effects: [
-      { type: 'shop_discount', amount: 0.2, desc: '下次商店消费 8 折' }
-    ],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-
-  // ==================== 教学类 (3张) ====================
-  {
-    id: 'ta_session',
-    name: '助教答疑',
-    icon: '📖',
-    type: 'teaching',
-    baseProduction: 8,
-    energyCost: 6,
-    tags: ['recovery', 'basic'],
-    rarity: 'basic',
-    effects: [
-      { type: 'energy_restore', amount: 5, desc: '恢复 5 点精力' }
-    ],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'guest_lecture',
-    name: '客座讲座',
-    icon: '🏛️',
-    type: 'teaching',
-    baseProduction: 14,
-    energyCost: 10,
-    tags: ['funding', 'uncommon'],
-    rarity: 'uncommon',
-    effects: [
-      { type: 'gain_funding', amount: 100, desc: '获得 100 经费' }
-    ],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  },
-  {
-    id: 'mentoring',
-    name: '辅导学弟学妹',
-    icon: '🧑‍🎓',
-    type: 'teaching',
-    baseProduction: 6,
-    energyCost: 4,
-    tags: ['hand_size', 'support'],
-    rarity: 'uncommon',
-    effects: [
-      { type: 'hand_size_bonus', amount: 1, desc: '本回合手牌上限 +1' }
-    ],
-    upgradeLevel: 0,
-    maxUpgrade: 3
-  }
+  // ==================== 社交 (social) - 13张 ====================
+  { id: 'soc_2',  name: '日常交流',   icon: '💬', suit: 'social', rank: '2',  energyCost: 2,  tags: ['basic'] },
+  { id: 'soc_3',  name: '组会旁听',   icon: '👂', suit: 'social', rank: '3',  energyCost: 3,  tags: ['basic'] },
+  { id: 'soc_4',  name: '请教同学',   icon: '🙋', suit: 'social', rank: '4',  energyCost: 4,  tags: ['basic'] },
+  { id: 'soc_5',  name: '组会汇报',   icon: '👥', suit: 'social', rank: '5',  energyCost: 5,  tags: ['basic', 'advisor'] },
+  { id: 'soc_6',  name: '跨组交流',   icon: '🌐', suit: 'social', rank: '6',  energyCost: 6,  tags: ['collab'] },
+  { id: 'soc_7',  name: '学术社交',   icon: '🍷', suit: 'social', rank: '7',  energyCost: 5,  tags: ['shop'] },
+  { id: 'soc_8',  name: '导师面谈',   icon: '👨‍🏫', suit: 'social', rank: '8',  energyCost: 6,  tags: ['advisor'] },
+  { id: 'soc_9',  name: '合作实验',   icon: '🤝', suit: 'social', rank: '9',  energyCost: 8,  tags: ['collab', 'quality'] },
+  { id: 'soc_10', name: '会议演讲',   icon: '🎤', suit: 'social', rank: '10', energyCost: 10, tags: ['powerful'] },
+  { id: 'soc_J',  name: '学术提案',   icon: '📋', suit: 'social', rank: 'J',  energyCost: 9,  tags: ['innovation'] },
+  { id: 'soc_Q',  name: '学派辩论',   icon: '⚡', suit: 'social', rank: 'Q',  energyCost: 10, tags: ['theory'] },
+  { id: 'soc_K',  name: '成果宣讲',   icon: '📢', suit: 'social', rank: 'K',  energyCost: 11, tags: ['validation'] },
+  { id: 'soc_A',  name: '国际大会主旨', icon: '🌍', suit: 'social', rank: 'A',  energyCost: 13, tags: ['breakthrough'] }
 ]
 
-/**
- * 按稀有度获取卡牌池
- */
-module.exports.getByRarity = function(rarity) {
-  return module.exports.filter(c => c.rarity === rarity)
+// 工具函数
+module.exports.getById = function(id) {
+  return module.exports.find(c => c.id === id)
 }
 
-/**
- * 按类型获取卡牌池
- */
-module.exports.getByType = function(type) {
-  return module.exports.filter(c => c.type === type)
+module.exports.getBySuit = function(suit) {
+  return module.exports.filter(c => c.suit === suit)
 }
 
-/**
- * 按标签筛选
- */
-module.exports.getByTag = function(tag) {
-  return module.exports.filter(c => c.tags && c.tags.includes(tag))
+module.exports.getByRank = function(rank) {
+  return module.exports.filter(c => c.rank === rank)
 }
 
-/**
- * 获取基础卡牌（用于初始牌组）
- */
-module.exports.getBasicCards = function() {
-  return module.exports.filter(c => c.rarity === 'basic')
-}
+module.exports.RANK_VALUES = RANK_VALUES

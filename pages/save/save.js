@@ -1,5 +1,5 @@
 /**
- * 学术 Roguelike —— 存档管理页
+ * 小丑牌-学术版 —— 存档管理页
  */
 
 const SaveManager = require('../../core/SaveManager')

@@ -14,7 +14,7 @@ const RESOURCE_LIMITS = {
 // 游戏初始状态（资源初值）
 const INITIAL_STATE = {
   energy: 80,
-  funding: 200,
+  funding: 8,
   paperProgress: 0,
   advisorSatisfaction: 60
 }

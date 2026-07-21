@@ -1,5 +1,5 @@
 /**
- * 学术 Roguelike —— 商店页面
+ * 小丑牌-学术版 —— 商店页面
  *
  * 每通过一关后进入，可花费经费购买技能卡/机遇卡/服务
  */
@@ -13,6 +13,9 @@ Page({
     skills: [],
     consumables: [],
     services: [],
+
+    // 已装备技能卡(可出售)
+    equippedSkills: [],
 
     // 玩家信息
     funding: 0,
@@ -63,15 +66,56 @@ Page({
     const deckManager = engine.runManager.deckManager
     const deckCards = deckManager ? deckManager.getUniqueCards() : []
 
+    // 获取已装备技能卡(含出售价格)
+    const allSkills = skillManager ? skillManager.getAll() : []
+    const shopConfig = require('../../config/shop')
+    const equippedSkills = allSkills.map(s => ({
+      ...s,
+      sellPrice: Math.floor((shopConfig.skillPrices[s.rarity] || 3) * 0.5)
+    }))
+
     this.setData({
       skills: shop.skills,
       consumables: shop.consumables,
       services: shop.services,
+      equippedSkills: equippedSkills,
       funding: funding,
       roundNumber: summary.roundNumber,
       ante: ante,
       deckCards: deckCards,
       rerollPrice: shop.rerollPrice
+    })
+  },
+
+  /**
+   * 出售已装备技能卡（回收 50% 经费）
+   */
+  onSellSkill(e) {
+    const index = e.currentTarget.dataset.index
+    const skill = this.data.equippedSkills[index]
+    if (!skill) return
+
+    wx.showModal({
+      title: '出售技能卡',
+      content: `确定出售「${skill.name}」吗？将回收 ¥${skill.sellPrice} 经费。`,
+      success: (res) => {
+        if (!res.confirm) return
+
+        const engine = app.globalData.gameEngine
+        const skillManager = engine.runManager.skillManager
+
+        // 找到并移除技能卡
+        const allSkills = skillManager.getAll()
+        const skillIndex = allSkills.findIndex(s => s.id === skill.id)
+        if (skillIndex >= 0) {
+          skillManager.removeSkill(skillIndex)
+          engine.runManager.state.resources.funding += skill.sellPrice
+        }
+
+        // 刷新数据
+        this._generateShop()
+        wx.showToast({ title: `已出售：${skill.name}`, icon: 'success' })
+      }
     })
   },
 

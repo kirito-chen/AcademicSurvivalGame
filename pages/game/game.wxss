@@ -14,7 +14,7 @@
 
 /* ===== 顶部状态栏 ===== */
 .top-bar {
-  padding: 12rpx 20rpx;
+  padding: 8rpx 20rpx;
   background: #16213e;
   border-bottom: 4rpx solid #e94560;
   flex-shrink: 0;
@@ -23,7 +23,6 @@
 .level-info {
   display: flex;
   flex-direction: column;
-  margin-bottom: 6rpx;
 }
 
 .level-header {
@@ -33,7 +32,7 @@
 }
 
 .level-num {
-  font-size: 24rpx;
+  font-size: 22rpx;
   font-weight: bold;
   color: #eeeeb8;
 }
@@ -131,15 +130,22 @@
 
 /* ===== 技能槽 ===== */
 .skill-slots-area {
-  padding: 10rpx 20rpx;
+  padding: 6rpx 20rpx;
   flex-shrink: 0;
   border-bottom: 2rpx solid #333;
+  max-height: 130rpx;
+  overflow-y: auto;
 }
 .skill-slots-row {
   display: flex;
-  gap: 10rpx;
-  overflow-x: auto;
+  gap: 8rpx;
 }
+
+/* ===== 回合状态 ===== */
+.round-status {
+  display: flex; gap: 16rpx; padding: 8rpx 16rpx; flex-wrap: wrap; justify-content: center;
+}
+.status-item { font-size: 20rpx; color: #eeeeb8; font-weight: bold; }
 
 /* ===== 主区域 ===== */
 .main-area {
@@ -148,8 +154,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 16rpx;
-  min-height: 0;
+  padding: 8rpx 16rpx;
+  min-height: 80rpx;
+  overflow: visible;
 }
 
 .played-zone {
@@ -163,22 +170,45 @@
 .played-scroll { width: 100%; white-space: nowrap; }
 .played-row { display: inline-flex; gap: 12rpx; padding: 8rpx; justify-content: center; }
 .play-count { font-size: 20rpx; color: #888; margin-top: 8rpx; }
+.play-hand-type { font-size: 24rpx; color: #f0a500; font-weight: bold; margin-top: 6rpx; }
+.play-chips { font-size: 22rpx; color: #00b4d8; font-weight: bold; margin-top: 4rpx; }
+.play-boss-warn { font-size: 18rpx; color: #e94560; margin-top: 4rpx; text-align: center; }
+
+.play-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rpx;
+}
 
 /* ===== 手牌区 ===== */
 .hand-area {
-  padding: 6rpx 20rpx 10rpx;
+  padding: 12rpx 20rpx 10rpx;
   background: #16213e;
   border-top: 4rpx solid #333;
   flex-shrink: 0;
+  min-height: 150rpx;
 }
 .hand-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6rpx; }
 .hand-label { font-size: 20rpx; color: #888; }
+.hand-hint { font-size: 18rpx; color: #f0a500; font-weight: bold; }
 
 .hand-scroll { width: 100%; white-space: nowrap; }
-.hand-row { display: inline-flex; gap: 10rpx; padding: 4rpx 0; align-items: flex-end; }
+.hand-row { display: inline-flex; gap: 10rpx; padding: 80rpx 0 8rpx; align-items: flex-end; }
 
-.hand-card-wrapper { display: inline-block; transition: transform 0.15s ease; }
-.hand-card-wrapper.card-selected { transform: translateY(-24rpx); }
+.hand-card-wrapper { position: relative; bottom: 0; transition: bottom 0.12s ease; }
+.hand-card-wrapper.card-picked { bottom: 75rpx; z-index: 10; filter: brightness(1.15); }
+
+.hand-hint { font-size: 18rpx; color: #f0a500; font-weight: bold; }
+
+/* 选中预览 */
+.select-preview {
+  margin-top: 12rpx; padding: 8rpx 16rpx;
+  background: rgba(240, 165, 0, 0.15); border: 2rpx solid #f0a500;
+}
+.preview-label { font-size: 20rpx; color: #eeeeb8; }
+.preview-hand { font-size: 20rpx; color: #f0a500; font-weight: bold; }
+.preview-hand.none { color: #888; }
 
 .hand-empty {
   display: flex; align-items: center; justify-content: center;
@@ -219,3 +249,17 @@
 }
 .game-over-text { font-size: 40rpx; font-weight: bold; color: #e94560; }
 .game-over-sub { font-size: 24rpx; color: #888; }
+
+/* ===== 牌型参考面板 ===== */
+.hand-ref-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 300;
+  display: flex; align-items: center; justify-content: center;
+}
+.hand-ref-panel { width: 85vw; max-width: 520rpx; padding: 32rpx; }
+.ref-title { font-size: 30rpx; font-weight: bold; color: #f0a500; display: block; text-align: center; margin-bottom: 20rpx; }
+.ref-list { display: flex; flex-direction: column; gap: 10rpx; }
+.ref-row { display: flex; align-items: center; gap: 12rpx; padding: 10rpx 12rpx; background: rgba(255,255,255,0.05); }
+.ref-icon { font-size: 30rpx; flex-shrink: 0; }
+.ref-info { display: flex; flex-direction: column; }
+.ref-name { font-size: 22rpx; font-weight: bold; color: #eeeeb8; }
+.ref-detail { font-size: 18rpx; color: #888; }

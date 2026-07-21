@@ -6,6 +6,6 @@
     "game-log": "/components/game-log/game-log",
     "status-bar": "/components/status-bar/status-bar"
   },
-  "navigationBarTitleText": "学术 Roguelike",
+  "navigationBarTitleText": "小丑牌-学术版",
   "disableScroll": true
 }

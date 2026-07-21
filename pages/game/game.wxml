@@ -1,4 +1,4 @@
-<!-- 学术 Roguelike —— 游戏主页面 -->
+<!-- 小丑牌-学术版 —— 游戏主页面 -->
 <view class="game-page">
 
   <!-- ===== 顶部状态栏 ===== -->
@@ -10,138 +10,110 @@
       </view>
       <text class="level-name">{{levelName}}</text>
       <view class="level-target">
-        <text class="target-label">目标产出:</text>
-        <text class="target-value">{{scoreTarget}}</text>
+        <text class="target-label">目标产出: {{scoreTarget}}</text>
       </view>
     </view>
-
     <view class="resource-row">
-      <view class="resource-item">
-        <text class="res-icon">⚡</text>
-        <view class="res-bar-wrap">
-          <view class="res-bar-fill energy" style="width: {{energy}}%"></view>
-        </view>
-        <text class="res-text">{{energy}}</text>
-      </view>
-      <view class="resource-item">
-        <text class="res-icon">💰</text>
-        <view class="res-bar-wrap">
-          <view class="res-bar-fill funding" style="width: {{funding / 100}}%"></view>
-        </view>
-        <text class="res-text">¥{{funding}}</text>
-      </view>
+      <view class="resource-item"><text class="res-icon">⚡</text><view class="res-bar-wrap"><view class="res-bar-fill energy" style="width: {{energy}}%"></view></view><text class="res-text">{{energy}}</text></view>
+      <view class="resource-item"><text class="res-icon">💰</text><view class="res-bar-wrap"><view class="res-bar-fill funding" style="width: {{funding / 100}}%"></view></view><text class="res-text">¥{{funding}}</text></view>
     </view>
   </view>
 
-  <!-- ===== Boss 效果横幅 ===== -->
-  <view class="boss-banner" wx:if="{{bossEffect}}">
-    <text class="boss-icon">⚠️</text>
-    <text class="boss-text">{{bossEffect.description}}</text>
-  </view>
+  <!-- Boss 横幅 -->
+  <view class="boss-banner" wx:if="{{bossEffect}}"><text class="boss-icon">⚠️</text><text class="boss-text">{{bossEffect.description}}</text></view>
 
-  <!-- ===== 技能槽位区 ===== -->
+  <!-- 技能槽 -->
   <view class="skill-slots-area">
     <view class="skill-slots-row">
       <block wx:for="{{maxSkillSlots}}" wx:key="index">
-        <skill-slot
-          skill="{{skills[index] || null}}"
-          index="{{index}}"
-        />
+        <skill-slot skill="{{skills[index] || null}}" index="{{index}}" />
       </block>
     </view>
   </view>
 
-  <!-- ===== 主区域: 出牌区 ===== -->
+  <!-- ===== 主区域 ===== -->
   <view class="main-area">
+
+    <!-- 回合状态 -->
+    <view class="round-status">
+      <text class="status-item">🎯 目标: {{scoreTarget}}</text>
+      <text class="status-item">📊 累计: {{roundScore}}</text>
+      <text class="status-item">🃏 出牌: {{playsRemaining}}次</text>
+      <text class="status-item">🗑️ 弃牌: {{discardsRemaining}}次</text>
+    </view>
+
+    <!-- 已打出的卡 -->
     <view class="played-zone">
-      <text class="zone-label" wx:if="{{playedCards.length === 0}}">点击手牌选中，再按「出牌」打出</text>
       <scroll-view class="played-scroll" scroll-x wx:if="{{playedCards.length > 0}}">
         <view class="played-row">
-          <game-card
-            wx:for="{{playedCards}}"
-            wx:key="index"
-            card="{{item}}"
-            cardType="research"
-            compact="{{true}}"
-            showDetail="{{false}}"
-          />
+          <game-card wx:for="{{playedCards}}" wx:key="index" card="{{item}}" cardType="research" compact="{{true}}" showDetail="{{false}}" />
         </view>
       </scroll-view>
-      <text class="play-count" wx:if="{{playedCards.length > 0}}">
-        已打出 {{playedCards.length}}/{{maxPlays}} 张
-      </text>
+      <view class="play-info" wx:if="{{playedCards.length > 0}}">
+        <text class="play-hand-type" wx:if="{{handTypeName}}">{{handTypeIcon}} {{handTypeName}}</text>
+        <text class="play-chips">rank值: {{playedTotalChips}}</text>
+      </view>
+
+      <!-- 选中预览 -->
+      <view class="select-preview" wx:if="{{selectedIndices.length >= 1}}">
+        <text class="preview-label">选中 {{selectedIndices.length}} 张 → </text>
+        <text class="preview-hand" wx:if="{{selectedPreview.handName}}">{{selectedPreview.handIcon}} {{selectedPreview.handName}} (rank:{{selectedPreview.chips}} +{{selectedPreview.baseChips}} ×{{selectedPreview.baseMult}})</text>
+        <text class="preview-hand none" wx:else>高牌 (rank值:{{selectedPreview.chips}})</text>
+      </view>
     </view>
   </view>
 
   <!-- ===== 手牌区 ===== -->
   <view class="hand-area">
     <view class="hand-header">
-      <text class="hand-label">📋 手牌 ({{handSize}}/{{maxHandSize}})</text>
+      <text class="hand-label">📋 手牌 ({{handSize}}/{{maxHandSize}}) · 牌堆 {{deckCount}}张</text>
+      <text class="hand-hint" wx:if="{{selectedIndices.length > 0}}">已选 {{selectedIndices.length}} 张</text>
     </view>
     <scroll-view class="hand-scroll" scroll-x enhanced show-scrollbar="{{false}}">
       <view class="hand-row">
         <view
-          wx:for="{{hand}}"
-          wx:key="index"
-          data-index="{{index}}"
-          class="hand-card-wrapper {{selectedCardIndex === index ? 'card-selected' : ''}}"
+          wx:for="{{hand}}" wx:key="index" data-index="{{index}}"
+          class="hand-card-wrapper {{selectedIndices.indexOf(index) >= 0 ? 'card-picked' : ''}}"
           bindtap="onSelectCard"
         >
-          <game-card
-            card="{{item}}"
-            cardType="research"
-            selected="{{selectedCardIndex === index}}"
-            compact="{{true}}"
-          />
+          <game-card card="{{item}}" cardType="research" selected="{{selectedIndices.indexOf(index) >= 0}}" compact="{{true}}" />
         </view>
-        <view class="hand-empty" wx:if="{{hand.length === 0}}">
-          <text>牌组已空，结算后重新洗牌</text>
-        </view>
+        <view class="hand-empty" wx:if="{{hand.length === 0}}"><text>牌组已空，结算后重新洗牌</text></view>
       </view>
     </scroll-view>
   </view>
 
   <!-- ===== 底部操作栏 ===== -->
   <view class="action-bar">
-    <pixel-button
-      theme="primary"
-      size="small"
-      disabled="{{selectedCardIndex < 0 || inShop || gameOver}}"
-      bindtap="onPlayCard"
-    >出牌</pixel-button>
-
-    <pixel-button
-      theme="secondary"
-      size="small"
-      disabled="{{inShop || gameOver}}"
-      bindtap="onFinishRound"
-    >结算回合</pixel-button>
-
-    <pixel-button
-      theme="ghost"
-      size="small"
-      disabled="{{inShop || gameOver}}"
-      bindtap="onSkipRound"
-    >跳过</pixel-button>
-
-    <pixel-button
-      theme="ghost"
-      size="small"
-      bindtap="onSave"
-    >存档</pixel-button>
+    <pixel-button theme="primary" size="small" disabled="{{selectedIndices.length === 0 || playsRemaining <= 0 || inShop || gameOver}}" bindtap="onPlayCards">出牌({{playsRemaining}})</pixel-button>
+    <pixel-button theme="warning" size="small" disabled="{{selectedIndices.length === 0 || discardsRemaining <= 0 || inShop || gameOver}}" bindtap="onDiscardCards">弃牌({{discardsRemaining}})</pixel-button>
+    <pixel-button theme="ghost" size="small" bindtap="onToggleHandRef">📋牌型</pixel-button>
+    <pixel-button theme="ghost" size="small" bindtap="onSave">存档</pixel-button>
   </view>
 
-  <!-- ===== Toast ===== -->
-  <view class="toast" wx:if="{{showToast}}">
-    <text>{{toastText}}</text>
-  </view>
-
-  <!-- ===== 游戏结束遮罩 ===== -->
-  <view class="game-over-overlay" wx:if="{{gameOver}}">
-    <view class="game-over-card">
-      <text class="game-over-text">游戏结束</text>
-      <text class="game-over-sub">正在前往结局页面...</text>
+  <!-- ===== 牌型参考面板 ===== -->
+  <view class="hand-ref-overlay" wx:if="{{showHandRef}}" bindtap="onToggleHandRef">
+    <view class="hand-ref-panel pixel-panel" catchtap="noop">
+      <text class="ref-title">📋 牌型参考</text>
+      <scroll-view class="ref-list" scroll-y style="max-height: 55vh;">
+        <view class="ref-row" wx:for="{{HAND_TYPES}}" wx:key="id">
+          <text class="ref-icon">{{item.icon}}</text>
+          <view class="ref-info">
+            <text class="ref-name">{{item.name}}</text>
+            <text class="ref-detail">最少{{item.minCards}}张 · 产出+{{item.baseChips}} · 倍率×{{item.baseMult}}</text>
+          </view>
+        </view>
+      </scroll-view>
+      <view class="pixel-btn pixel-btn-small" bindtap="onToggleHandRef" style="margin-top: 16rpx;">关闭</view>
     </view>
+  </view>
+
+  <!-- Toast -->
+  <view class="toast" wx:if="{{showToast}}"><text>{{toastText}}</text></view>
+
+  <!-- 游戏结束遮罩 -->
+  <view class="game-over-overlay" wx:if="{{gameOver}}">
+    <view class="game-over-card"><text class="game-over-text">游戏结束</text><text class="game-over-sub">正在前往结局页面...</text></view>
   </view>
 
 </view>

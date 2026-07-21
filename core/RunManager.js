@@ -82,7 +82,7 @@ class RunManager {
     this.state = {
       resources: this.resourceManager.createInitialResources({
         energy: 80,
-        funding: 200,
+        funding: 8,
         paperProgress: 0,
         advisorSatisfaction: 60
       }),
@@ -95,7 +95,12 @@ class RunManager {
         totalFundingEarned: 0,
         totalFundingSpent: 0,
         highestSingleScore: 0
-      }
+      },
+      // 每回合出牌/弃牌计数
+      roundScore: 0,
+      playsRemaining: 4,
+      discardsRemaining: 3,
+      lastPlayedCards: []  // 保留上一轮打出的牌用于显示
     }
 
     this.currentRoundIndex = 0
@@ -147,6 +152,12 @@ class RunManager {
     const level = this.getCurrentLevel()
     if (!level) return
 
+    // 重置回合状态
+    this.state.roundScore = 0
+    this.state.playsRemaining = 4
+    this.state.discardsRemaining = 3
+    this.state.lastPlayedCards = []
+
     this.deckManager.resetRound()
 
     // 设置手牌上限和抽牌数
@@ -190,87 +201,119 @@ class RunManager {
   }
 
   /**
-   * 打出一张手牌
-   * @param {number} handIndex - 手牌索引
+   * 打出多张手牌 — 每次出牌独立计分并清理桌面，累加回合分
+   * @param {Array<number>} handIndices - 手牌索引数组(从大到小排列)
    * @returns {object} 结果
    */
-  playCard(handIndex) {
+  playCards(handIndices) {
     const level = this.getCurrentLevel()
     if (!level) return { success: false, message: '没有当前关卡' }
+    if (!handIndices || handIndices.length === 0) return { success: false, message: '未选择手牌' }
+    if (this.state.playsRemaining <= 0) return { success: false, message: '本回合出牌次数已用完' }
 
-    const card = this.deckManager.playCard(handIndex)
-    if (!card) return { success: false, message: '无法打出这张牌' }
+    const sorted = [...handIndices].sort((a, b) => b - a)
 
-    // 计算精力消耗
-    let energyCost = card.energyCost || 0
-
-    // 检查是否首张免费
-    const handEffects = this.skillManager.getHandEffects()
-    const permEffects = this.skillManager.getPermanentEffects()
-    if (handEffects.firstCardFree && this.deckManager.playedThisRound.length === 1) {
-      energyCost = 0
-    }
-    if (permEffects.energyFreeAll) {
-      energyCost = 0
-    }
-
-    // 应用难度修正
-    const difficultyConfig = metaConfig.difficulties.find(d => d.id === this.difficulty)
-    if (difficultyConfig && difficultyConfig.modifiers.energyCostMultiplier) {
-      energyCost = Math.floor(energyCost * difficultyConfig.modifiers.energyCostMultiplier)
-    }
-
-    // 应用Boss效果
-    if (this.currentBossEffect && this.currentBossEffect.effect.extraEnergyCost) {
-      energyCost += this.currentBossEffect.effect.extraEnergyCost
-    }
-    if (this.currentBossEffect && this.currentBossEffect.effect.energyCostMultiplier) {
-      energyCost = Math.floor(energyCost * this.currentBossEffect.effect.energyCostMultiplier)
-    }
-
-    // 应用精力消耗
-    if (energyCost > 0) {
-      this.resourceManager.applyEffects(this.state.resources, { energy: -energyCost })
-    }
-
-    // 检查经费消耗(卡牌自带效果)
-    if (card.effects) {
-      for (const effect of card.effects) {
-        if (effect.type === 'cost_funding') {
-          this.resourceManager.applyEffects(this.state.resources, { funding: -effect.amount })
-          this.state.statistics.totalFundingSpent += effect.amount
-        }
-        if (effect.type === 'gain_funding') {
-          this.resourceManager.applyEffects(this.state.resources, { funding: effect.amount })
-          this.state.statistics.totalFundingEarned += effect.amount
-        }
-        if (effect.type === 'energy_restore') {
-          this.resourceManager.applyEffects(this.state.resources, { energy: effect.amount })
-        }
-        if (effect.type === 'draw_cards') {
-          this.deckManager.drawCards(effect.count)
-        }
+    // 先打出所有选中的卡
+    let totalEnergyCost = 0
+    for (const idx of sorted) {
+      const card = this.deckManager.playCard(idx)
+      if (!card) continue
+      let energyCost = card.energyCost || 0
+      const permEffects = this.skillManager.getPermanentEffects()
+      if (permEffects.energyFreeAll) energyCost = 0
+      if (energyCost > 0) {
+        this.resourceManager.applyEffects(this.state.resources, { energy: -energyCost })
+        totalEnergyCost += energyCost
       }
+      this.state.statistics.totalCardsPlayed++
     }
 
-    this.state.statistics.totalCardsPlayed++
+    // 计分
+    this.scoreResolver.setSkills(this.skillManager.getAll())
+    const playedCards = this.deckManager.getPlayedDetails()
+    // 保存本轮打出的牌用于UI显示
+    this.state.lastPlayedCards = playedCards.map(c => ({ ...c }))
+    const scoreResult = this.scoreResolver.calculateScore(playedCards, this.state, this.currentBossEffect)
+    if (scoreResult.finalScore > this.state.statistics.highestSingleScore) {
+      this.state.statistics.highestSingleScore = scoreResult.finalScore
+    }
+    this.state.roundScore += scoreResult.finalScore
+    this.totalScore += scoreResult.finalScore
+    this.state.playsRemaining--
 
-    this._addLog('decision', `${card.icon} 打出了「${card.name}」—— 产出 +${card.baseProduction}，精力 -${energyCost}`)
+    const ht = scoreResult.handType
+    this._addLog('score', `${ht ? ht.icon : ''} ${ht ? ht.name : '高牌'}：${scoreResult.chips}×${scoreResult.mult}=${scoreResult.finalScore}分 (剩余${this.state.playsRemaining}次出牌)`)
 
-    // 检查精力耗尽
+    // 精力耗尽检查
     if (this.state.resources.energy <= 0) {
       const result = this._endRun(false, 'energy_exhausted')
       this._notifyChange()
-      return { type: 'game_over', result, success: true }
+      return { type: 'game_over', result, scoreResult }
     }
 
-    // 检查经费耗尽
-    if (this.state.resources.funding < 0) {
-      this.state.resources.funding = 0
+    // 已达目标 → 过关
+    if (this.state.roundScore >= level.scoreTarget) {
+      return this._passRound(scoreResult)
     }
 
+    // 出牌次数用完 → 失败
+    if (this.state.playsRemaining <= 0) {
+      this._addLog('event', `❌ 出牌次数用完！累计 ${this.state.roundScore} / 目标 ${level.scoreTarget}`)
+      const result = this._endRun(false, 'score_not_met')
+      this._notifyChange()
+      return { type: 'game_over', result, scoreResult }
+    }
+
+    // 清理桌面，补牌继续
+    this._clearTableAndDraw()
     this._notifyChange()
-    return { type: 'card_played', card, energyCost, success: true }
+    return { type: 'cards_played', scoreResult, playsRemaining: this.state.playsRemaining, success: true }
+  }
+
+  /**
+   * 弃牌 — 丢弃选中手牌并补牌
+   */
+  discardCards(handIndices) {
+    if (!handIndices || handIndices.length === 0) return { success: false, message: '未选择手牌' }
+    if (this.state.discardsRemaining <= 0) return { success: false, message: '本回合弃牌次数已用完' }
+
+    const sorted = [...handIndices].sort((a, b) => b - a)
+    for (const idx of sorted) this.deckManager.discardCard(idx)
+    this.state.discardsRemaining--
+    this.deckManager.drawCards(sorted.length)
+    this._addLog('decision', `🗑️ 弃掉 ${sorted.length} 张牌，补牌 ${sorted.length} 张 (剩余${this.state.discardsRemaining}次弃牌)`)
+    this._notifyChange()
+    return { type: 'cards_discarded', count: sorted.length, discardsRemaining: this.state.discardsRemaining, success: true }
+  }
+
+  _clearTableAndDraw() {
+    // 把已打出的牌移到弃牌堆（保留在UI上直到下次出牌）
+    this.deckManager.discard.push(...this.deckManager.playedThisRound)
+    this.deckManager.playedThisRound = []
+    // 补牌到手牌上限
+    const need = this.deckManager.maxHandSize - this.deckManager.hand.length
+    if (need > 0) this.deckManager.drawCards(need)
+  }
+
+  _passRound(scoreResult) {
+    const level = this.getCurrentLevel()
+    this.state.statistics.totalRoundsCleared++
+    this._addLog('system', `✅ 过关！累计 ${this.state.roundScore} / 目标 ${level.scoreTarget}`)
+    const anteClearBonus = shopConfig.anteClearFunding[level.ante] || 5
+    let fundingReward = anteClearBonus
+    if (level.isBoss) fundingReward += shopConfig.bossClearBonus
+    this.resourceManager.applyEffects(this.state.resources, { funding: fundingReward })
+    this.state.statistics.totalFundingEarned += fundingReward
+    this._addLog('system', `💰 获得 ${fundingReward} 经费`)
+    if (this.currentRoundIndex >= levelsConfig.getTotalRounds() - 1) {
+      const result = this._endRun(true, 'graduated')
+      this._notifyChange()
+      return { type: 'game_over', result, scoreResult }
+    }
+    this.currentRoundIndex++
+    this.inShop = true
+    this._notifyChange()
+    return { type: 'round_cleared', scoreResult, enterShop: true }
   }
 
   /**
@@ -296,13 +339,13 @@ class RunManager {
 
     this._addLog('score', `📊 本回合产出 ${scoreResult.chips} × ${scoreResult.mult} 倍率 = ${scoreResult.finalScore} 分`)
 
-    // 检查Boss关的类型要求
+    // 检查Boss关的 suit 要求
     if (this.currentBossEffect && this.currentBossEffect.effect.requiredTypes) {
       const reqTypes = this.currentBossEffect.effect.requiredTypes
-      for (const [type, count] of Object.entries(reqTypes)) {
-        const actual = playedCards.filter(c => c.type === type).length
+      for (const [suit, count] of Object.entries(reqTypes)) {
+        const actual = playedCards.filter(c => c.suit === suit).length
         if (actual < count) {
-          this._addLog('event', `❌ Boss要求未满足：需要 ${count} 张${this._getTypeName(type)}卡，实际打出 ${actual} 张`)
+          this._addLog('event', `❌ Boss要求未满足：需要 ${count} 张${this._getSuitName(suit)}卡，实际打出 ${actual} 张`)
           const result = this._endRun(false, 'boss_failed')
           this._notifyChange()
           return { type: 'game_over', result, scoreResult }
@@ -392,13 +435,17 @@ class RunManager {
       hand: this.deckManager ? this.deckManager.getHandDetails() : [],
       handSize: this.deckManager ? this.deckManager.hand.length : 0,
       maxHandSize: this.deckManager ? this.deckManager.maxHandSize : 8,
-      playedCards: this.deckManager ? this.deckManager.getPlayedDetails() : [],
+      playedCards: this.state ? (this.state.lastPlayedCards || []) : [],
       maxPlays: level ? level.maxPlays : 4,
       skills: this.skillManager ? this.skillManager.getAll() : [],
       maxSkillSlots: this.skillManager ? this.skillManager.maxSlots : 5,
       deckStats: this.deckManager ? this.deckManager.getStats() : {},
+      deckCount: this.deckManager ? this.deckManager.deck.length : 0,
       bossEffect: this.currentBossEffect,
-      totalScore: this.totalScore
+      totalScore: this.totalScore,
+      roundScore: this.state ? this.state.roundScore : 0,
+      playsRemaining: this.state ? this.state.playsRemaining : 4,
+      discardsRemaining: this.state ? this.state.discardsRemaining : 3
     }
   }
 
@@ -415,18 +462,18 @@ class RunManager {
       newAchievements: this.newAchievements
     })
 
-    // 检查是否打出过所有类型
+    // 检查是否打出过所有 suit
     const allPlayedCards = this.deckManager ? [
       ...this.deckManager.deck,
       ...this.deckManager.hand,
       ...this.deckManager.discard,
       ...this.deckManager.playedThisRound
     ] : []
-    const playedTypes = new Set()
+    const playedSuits = new Set()
     const cardsConfig = require('../config/cards')
     allPlayedCards.forEach(id => {
       const c = cardsConfig.find(card => card.id === id)
-      if (c) playedTypes.add(c.type)
+      if (c) playedSuits.add(c.suit)
     })
 
     return {
@@ -439,7 +486,7 @@ class RunManager {
         skillCount: this.skillManager ? this.skillManager.getCount() : 0,
         finalEnergy: this.state.resources.energy,
         finalFunding: this.state.resources.funding,
-        allTypesPlayed: playedTypes.size >= 5
+        allSuitsPlayed: playedSuits.size >= 4
       },
       apGained,
       discipline: this.discipline,
@@ -507,15 +554,14 @@ class RunManager {
     this.onStateChange = callback
   }
 
-  _getTypeName(type) {
+  _getSuitName(suit) {
     const map = {
       experiment: '实验',
       writing: '写作',
       analysis: '数据分析',
-      social: '社交',
-      teaching: '教学'
+      social: '社交'
     }
-    return map[type] || type
+    return map[suit] || suit
   }
 }
 

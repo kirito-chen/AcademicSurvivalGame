@@ -37,6 +37,28 @@
       </view>
     </view>
 
+    <!-- ===== 已装备技能卡（可出售） ===== -->
+    <view class="shop-section" wx:if="{{equippedSkills.length > 0}}">
+      <view class="section-header">
+        <text class="section-title">💼 已装备技能卡</text>
+        <text class="section-hint">点击出售，回收 50% 经费</text>
+      </view>
+      <view class="section-grid">
+        <view
+          class="shop-item sell-item"
+          wx:for="{{equippedSkills}}"
+          wx:key="id"
+          data-index="{{index}}"
+          bindtap="onSellSkill"
+        >
+          <game-card card="{{item}}" cardType="skill" />
+          <view class="item-price sell-price">
+            <text class="price-text">卖 ¥{{item.sellPrice}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
     <!-- ===== 机遇卡区 ===== -->
     <view class="shop-section" wx:if="{{consumables.length > 0}}">
       <view class="section-header">

@@ -1,53 +1,48 @@
-<!-- 学术 Roguelike —— 通用卡牌组件 -->
+<!-- 小丑牌-学术版 —— 通用卡牌组件 -->
 <view
   class="game-card card-{{cardType}} {{selected ? 'selected' : ''}} {{disabled ? 'disabled' : ''}} {{compact ? 'compact' : ''}}"
-  style="--card-color: {{cardType === 'research' ? (typeColors[card.type] || '#aaa') : (cardType === 'skill' ? (rarityColors[card.rarity] || '#aaa') : '#4ecdc4')}}"
+  style="--card-color: {{cardType === 'research' ? (suitColors[card.suit] || '#aaa') : (cardType === 'skill' ? (rarityColors[card.rarity] || '#aaa') : '#4ecdc4')}}"
   bindtap="onTap"
   bindlongpress="onLongPress"
 >
-  <!-- 图标区 -->
-  <view class="card-icon">{{card.icon || '📄'}}</view>
 
-  <!-- 信息区 -->
-  <view class="card-info" wx:if="{{showDetail}}">
-    <text class="card-name">{{card.name || '未知卡牌'}}</text>
+  <!-- 研究方法卡：扑克牌风格 -->
+  <block wx:if="{{cardType === 'research'}}">
+    <view class="card-corner top-left">
+      <text class="corner-rank" style="color: {{suitColors[card.suit] || '#1a1a2e'}}">{{card.rank || '?'}}</text>
+      <text class="corner-suit-sym" style="color: {{suitColors[card.suit] || '#1a1a2e'}}">{{suitSymbols[card.suit] || '?'}}</text>
+    </view>
+    <view class="card-center">
+      <text class="center-suit" style="color: {{suitColors[card.suit] || '#1a1a2e'}}">{{suitSymbols[card.suit] || '?'}}</text>
+    </view>
+    <view class="card-corner bottom-right">
+      <text class="corner-rank" style="color: {{suitColors[card.suit] || '#1a1a2e'}}">{{card.rank || '?'}}</text>
+      <text class="corner-suit-sym" style="color: {{suitColors[card.suit] || '#1a1a2e'}}">{{suitSymbols[card.suit] || '?'}}</text>
+    </view>
+    <view class="card-name-mini" wx:if="{{!compact}}">{{card.name}}</view>
+    <view class="card-cost-mini">{{card.energyCost || 0}}⚡</view>
+  </block>
 
-    <!-- 研究方法卡 -->
-    <block wx:if="{{cardType === 'research'}}">
-      <view class="card-stats">
-        <text class="stat production">产出: {{card.baseProduction || 0}}</text>
-        <text class="stat energy-cost">精力: {{card.energyCost || 0}}</text>
-      </view>
-      <view class="card-tags" wx:if="{{card.tags && card.tags.length > 0 && !compact}}">
-        <text class="tag" wx:for="{{card.tags}}" wx:for-item="tag" wx:key="*this">{{tag}}</text>
-      </view>
-    </block>
-
-    <!-- 技能卡 -->
-    <block wx:if="{{cardType === 'skill'}}">
-      <view class="card-rarity" style="color: {{rarityColors[card.rarity] || '#aaa'}}">
-        {{rarityNames[card.rarity] || '普通'}}
-      </view>
+  <!-- 技能卡 -->
+  <block wx:if="{{cardType === 'skill'}}">
+    <view class="card-icon">{{card.icon || '🧠'}}</view>
+    <view class="card-info" wx:if="{{showDetail}}">
+      <text class="card-name">{{card.name || '?'}}</text>
+      <view class="card-rarity" style="color: {{rarityColors[card.rarity] || '#aaa'}}">{{rarityNames[card.rarity] || '?'}}</view>
       <view class="card-desc" wx:if="{{!compact}}">{{card.description || ''}}</view>
-    </block>
+    </view>
+  </block>
 
-    <!-- 机遇卡 -->
-    <block wx:if="{{cardType === 'consumable'}}">
+  <!-- 机遇卡 -->
+  <block wx:if="{{cardType === 'consumable'}}">
+    <view class="card-icon">{{card.icon || '🎲'}}</view>
+    <view class="card-info" wx:if="{{showDetail}}">
+      <text class="card-name">{{card.name || '?'}}</text>
       <view class="card-cost">价格: {{card.price || card.cost || '?'}}</view>
       <view class="card-desc" wx:if="{{!compact}}">{{card.description || ''}}</view>
-    </block>
-  </view>
+    </view>
+  </block>
 
-  <!-- 紧凑模式: 仅图标 -->
-  <view class="card-icon-only" wx:if="{{!showDetail}}">
-    <text>{{card.icon || '📄'}}</text>
-  </view>
-
-  <!-- 升级标记 -->
-  <view class="upgrade-badge" wx:if="{{card.upgradeLevel > 0}}">
-    +{{card.upgradeLevel}}
-  </view>
-
-  <!-- 选中勾选 -->
-  <view class="select-check" wx:if="{{selected}}">✓</view>
+  <!-- 技能卡/机遇卡显示选中勾，手牌不显示 -->
+  <view class="select-check" wx:if="{{selected && cardType !== 'research'}}">✓</view>
 </view>

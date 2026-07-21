@@ -5,8 +5,8 @@
   <view class="hero-section">
     <view class="logo-area">
       <text class="logo-icon">🎓</text>
-      <text class="logo-title pixel-text-glow">学术 Roguelike</text>
-      <text class="logo-subtitle">Academic Deck-Builder</text>
+      <text class="logo-title pixel-text-glow">小丑牌-学术版</text>
+      <text class="logo-subtitle">Academic Balatro-like Deck Builder</text>
     </view>
 
     <view class="meta-bar" wx:if="{{metaAP >= 0}}">
@@ -110,7 +110,7 @@
 
   <!-- ===== 关于面板 ===== -->
   <view class="about-panel pixel-panel" wx:if="{{showAbout}}">
-    <text class="about-title">📖 关于学术 Roguelike</text>
+    <text class="about-title">📖 关于小丑牌-学术版</text>
     <view class="about-content">
       <text class="about-text">一个博士学术主题的 Roguelike 卡牌构建游戏。</text>
       <text class="about-text">🎯 每局(Run)：选择学科牌组 → 闯过12关 → 最终答辩</text>

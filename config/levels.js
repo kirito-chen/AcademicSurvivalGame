@@ -57,7 +57,7 @@ module.exports = [
     bossEffect: {
       type: 'type_restriction',
       description: '资格考试委员会：实验类和写作类卡产出 -30%',
-      effect: { cardType: ['experiment', 'writing'], productionPenalty: 0.3 }
+      effect: { suit: ['experiment', 'writing'], productionPenalty: 0.3 }
     },
     roundIntro: '⚡ Boss关：博士生资格考试！委员会对你的实验与写作能力格外严苛。'
   },

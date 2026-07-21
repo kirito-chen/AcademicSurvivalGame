@@ -37,7 +37,7 @@ module.exports = [
     rarity: 'common',
     cost: 3,
     trigger: 'onPlay',
-    condition: { cardType: 'experiment' },
+    condition: { suit: 'experiment' },
     effect: { energyRestore: 3 },
     description: '每打出一张实验卡，恢复 3 点精力'
   },
@@ -70,7 +70,7 @@ module.exports = [
     rarity: 'common',
     cost: 4,
     trigger: 'onScore',
-    condition: { cardType: 'writing' },
+    condition: { suit: 'writing' },
     effect: { multBonus: 2 },
     description: '结算时，每张写作卡 +2 倍率'
   },
@@ -81,7 +81,7 @@ module.exports = [
     rarity: 'common',
     cost: 3,
     trigger: 'onPlay',
-    condition: { cardType: 'experiment' },
+    condition: { suit: 'experiment' },
     effect: { chipsBonus: 5 },
     description: '每打出一张实验卡，+5 产出'
   },
@@ -103,7 +103,7 @@ module.exports = [
     rarity: 'common',
     cost: 3,
     trigger: 'onScore',
-    condition: { cardType: 'writing' },
+    condition: { suit: 'writing' },
     effect: { chipsBonus: 5 },
     description: '结算时，每张写作卡 +5 产出'
   },
@@ -125,7 +125,7 @@ module.exports = [
     rarity: 'common',
     cost: 3,
     trigger: 'onPlay',
-    condition: { cardType: 'social' },
+    condition: { suit: 'social' },
     effect: { multBonus: 3 },
     description: '每打出一张社交卡，+3 倍率'
   },
@@ -158,7 +158,7 @@ module.exports = [
     rarity: 'common',
     cost: 3,
     trigger: 'onPlay',
-    condition: { cardType: 'writing' },
+    condition: { suit: 'writing' },
     effect: { energyReduce: 2 },
     description: '写作卡精力消耗 -2'
   },
@@ -169,7 +169,7 @@ module.exports = [
     rarity: 'common',
     cost: 3,
     trigger: 'onPlay',
-    condition: { cardType: 'experiment', chance: 0.5 },
+    condition: { suit: 'experiment', chance: 0.5 },
     effect: { chipsBonus: 8 },
     description: '打出实验卡时 50% 概率 +8 产出'
   },
@@ -191,7 +191,7 @@ module.exports = [
     rarity: 'common',
     cost: 4,
     trigger: 'onPlay',
-    condition: { cardType: 'social' },
+    condition: { suit: 'social' },
     effect: { drawCount: 1 },
     description: '每打出一张社交卡，抽 1 张牌'
   },
@@ -202,7 +202,7 @@ module.exports = [
     rarity: 'common',
     cost: 3,
     trigger: 'onPlay',
-    condition: { cardType: 'analysis' },
+    condition: { suit: 'analysis' },
     effect: { chipsBonus: 6 },
     description: '每打出一张数据分析卡，+6 产出'
   },
@@ -235,7 +235,7 @@ module.exports = [
     rarity: 'common',
     cost: 4,
     trigger: 'onScore',
-    condition: { cardType: 'writing' },
+    condition: { suit: 'writing' },
     effect: { multPerCard: 1 },
     description: '结算时，手牌中每张写作卡 +1 倍率'
   },
@@ -314,7 +314,7 @@ module.exports = [
     rarity: 'uncommon',
     cost: 6,
     trigger: 'onScore',
-    condition: { cardType: 'writing', minEnergy: 50 },
+    condition: { suit: 'writing', minEnergy: 50 },
     effect: { chipMultiply: 2 },
     description: '精力 > 50 时，写作卡产出翻倍'
   },
@@ -358,7 +358,7 @@ module.exports = [
     rarity: 'uncommon',
     cost: 6,
     trigger: 'onHand',
-    condition: { cardType: 'experiment' },
+    condition: { suit: 'experiment' },
     effect: { handChipsBonus: 5 },
     description: '手牌中每张实验卡 +5 产出'
   },
@@ -380,7 +380,7 @@ module.exports = [
     rarity: 'uncommon',
     cost: 5,
     trigger: 'onPlay',
-    condition: { cardType: 'social' },
+    condition: { suit: 'social' },
     effect: { multBonus: 4 },
     description: '打出社交卡时 +4 倍率'
   },
@@ -391,7 +391,7 @@ module.exports = [
     rarity: 'uncommon',
     cost: 6,
     trigger: 'onScore',
-    condition: { cardType: 'writing' },
+    condition: { suit: 'writing' },
     effect: { chipsBonusPerCard: 8 },
     description: '结算时每张写作卡额外 +8 产出'
   },
@@ -426,7 +426,7 @@ module.exports = [
     rarity: 'rare',
     cost: 9,
     trigger: 'onScore',
-    condition: { cardType: 'experiment', minCount: 1 },
+    condition: { suit: 'experiment', minCount: 1 },
     effect: { multMultiply: 2 },
     description: '本回合打出任何实验卡，最终倍率 ×2'
   },
@@ -437,7 +437,7 @@ module.exports = [
     rarity: 'rare',
     cost: 10,
     trigger: 'onScore',
-    condition: { cardType: 'writing' },
+    condition: { suit: 'writing' },
     effect: { chipMultiply: 3 },
     description: '写作卡产出 ×3'
   },
@@ -470,7 +470,7 @@ module.exports = [
     rarity: 'rare',
     cost: 9,
     trigger: 'onPlay',
-    condition: { cardType: 'experiment', chance: 0.15 },
+    condition: { suit: 'experiment', chance: 0.15 },
     effect: { chipMultiply: 5 },
     description: '打出实验卡时 15% 概率产出 ×5'
   },
@@ -481,7 +481,7 @@ module.exports = [
     rarity: 'rare',
     cost: 10,
     trigger: 'onScore',
-    condition: { cardType: 'analysis' },
+    condition: { suit: 'analysis' },
     effect: { countAsBoth: ['experiment', 'writing'] },
     description: '数据分析卡同时视为实验+写作卡结算'
   },
@@ -492,7 +492,7 @@ module.exports = [
     rarity: 'rare',
     cost: 9,
     trigger: 'onPlay',
-    condition: { cardType: 'social' },
+    condition: { suit: 'social' },
     effect: { allCardsChipsBonus: 25 },
     description: '打出社交卡时，本回合所有卡 +25 产出'
   },
@@ -503,7 +503,7 @@ module.exports = [
     rarity: 'rare',
     cost: 8,
     trigger: 'onScore',
-    condition: { cardType: 'experiment', minCount: 1 },
+    condition: { suit: 'experiment', minCount: 1 },
     effect: { chipMultiply: 1.5 },
     description: '打出实验卡，总产出 ×1.5'
   },

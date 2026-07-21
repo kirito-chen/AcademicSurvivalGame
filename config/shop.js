@@ -20,27 +20,27 @@ module.exports = {
     4: { skills: 2, consumables: 1 }
   },
 
-  // 技能卡价格（按稀有度）
+  // 技能卡价格（按稀有度）— 降低初始门槛
   skillPrices: {
-    common: 3,
-    uncommon: 6,
-    rare: 9,
-    legendary: 14
+    common: 1,
+    uncommon: 2,
+    rare: 4,
+    legendary: 6
   },
 
-  // 机遇卡价格（按稀有度，但也可单独定价）
+  // 机遇卡价格
   consumablePrices: {
-    common: 2,
-    uncommon: 5,
-    rare: 8
+    common: 1,
+    uncommon: 2,
+    rare: 4
   },
 
   // 服务价格
   servicePrices: {
-    upgradeCard: 4,
-    deleteCard: 3,
-    duplicateCard: 5,
-    rerollShop: 3   // 刷新商店所有商品
+    upgradeCard: 2,
+    deleteCard: 1,
+    duplicateCard: 3,
+    rerollShop: 1   // 刷新商店所有商品
   },
 
   // 刷新费用递增倍率
@@ -55,16 +55,16 @@ module.exports = {
     4: { common: 30, uncommon: 35, rare: 25, legendary: 10 }
   },
 
-  // 经费奖励 (过关时获得，按学期)
+  // 经费奖励 (过关时获得，按学期，紧缩经济)
   anteClearFunding: {
-    1: 200,
-    2: 350,
-    3: 500,
-    4: 800
+    1: 5,
+    2: 8,
+    3: 12,
+    4: 18
   },
 
   // Boss关额外经费奖励
-  bossClearBonus: 300,
+  bossClearBonus: 10,
 
   // 剩余经费结算加成
   leftoverFundingMultiplier: 0.1
